@@ -1298,7 +1298,12 @@
             "ishaTime": "11:29 PM",
             "staticPrayerTimeDate": null,
             "qiyamTime": "01:13 AM",
-            "isToday": 0
+             "isToday": 0,
+            "fajarJamahTime": "3:45 AM",
+            "zohrJamahTime": "1:45 PM",
+            "asarJamahTime": "6:10 PM",
+            "magribJamahTime": "10:04 PM",
+            "ishaJamahTime": "10:04 PM"
         },
         {
             "responseCode": null,
@@ -1350,7 +1355,12 @@
             "ishaTime": "11:29 PM",
             "staticPrayerTimeDate": null,
             "qiyamTime": "01:15 AM",
-            "isToday": 0
+             "isToday": 0,
+            "fajarJamahTime": "3:45 AM",
+            "zohrJamahTime": "1:45 PM",
+            "asarJamahTime": "6:10 PM",
+            "magribJamahTime": "10:04 PM",
+            "ishaJamahTime": "10:04 PM"
         },
         {
             "responseCode": null,
@@ -1402,7 +1412,12 @@
             "ishaTime": "11:29 PM",
             "staticPrayerTimeDate": null,
             "qiyamTime": "01:15 AM",
-            "isToday": 0
+             "isToday": 0,
+            "fajarJamahTime": "3:45 AM",
+            "zohrJamahTime": "1:45 PM",
+            "asarJamahTime": "6:10 PM",
+            "magribJamahTime": "10:04 PM",
+            "ishaJamahTime": "10:04 PM"
         },
         {
             "responseCode": null,
@@ -1454,7 +1469,12 @@
             "ishaTime": "11:29 PM",
             "staticPrayerTimeDate": null,
             "qiyamTime": "01:15 AM",
-            "isToday": 0
+             "isToday": 0,
+            "fajarJamahTime": "3:45 AM",
+            "zohrJamahTime": "1:45 PM",
+            "asarJamahTime": "6:10 PM",
+            "magribJamahTime": "10:04 PM",
+            "ishaJamahTime": "10:04 PM"
         },
         {
             "responseCode": null,
@@ -1506,7 +1526,12 @@
             "ishaTime": "11:29 PM",
             "staticPrayerTimeDate": null,
             "qiyamTime": "01:15 AM",
-            "isToday": 0
+             "isToday": 0,
+            "fajarJamahTime": "3:45 AM",
+            "zohrJamahTime": "1:45 PM",
+            "asarJamahTime": "6:10 PM",
+            "magribJamahTime": "10:04 PM",
+            "ishaJamahTime": "10:04 PM"
         },
         {
             "responseCode": null,
@@ -1558,7 +1583,12 @@
             "ishaTime": "11:29 PM",
             "staticPrayerTimeDate": null,
             "qiyamTime": "01:15 AM",
-            "isToday": 0
+             "isToday": 0,
+            "fajarJamahTime": "3:45 AM",
+            "zohrJamahTime": "1:45 PM",
+            "asarJamahTime": "6:10 PM",
+            "magribJamahTime": "10:04 PM",
+            "ishaJamahTime": "10:04 PM"
         }
     ],
     "monthName": "June 2023",
