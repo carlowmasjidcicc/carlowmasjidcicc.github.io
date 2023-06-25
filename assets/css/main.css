@@ -18,23 +18,23 @@ h6 {
 /* BUTTONS START */
 .btn-success {
 	color: #fff;
-	background-color: #0D5E10;
-	border-color: #0D5E10;
+	background-color: #024b3a;
+	border-color: #024b3a;
 }
 
 /* BUTTONS END */
 /* BADGES START */
 .badge-success {
 	color: #fff;
-	background-color: #0D5E10;
-	border-color: #0D5E10;
+	background-color: #024b3a;
+	border-color: #024b3a;
 }
 
 /* BADGES END */
 /* BACKGROUNDS START */
 .bg-secondary {
 	color: #fff;
-	background-color: #0d5b5e !important;
+	background-color: #024b3a !important;
 	background: linear-gradient(to right, #3ea9ad, #524dd6);
 }
 
@@ -55,7 +55,7 @@ h6 {
 .dropdown-item:active {
 	color: #fff;
 	text-decoration: none;
-	background-color: #0D5E10;
+	background-color: #024b3a;
 }
 
 .navbar {
@@ -64,7 +64,7 @@ h6 {
 
 .nav-pills .nav-link.active {
 	color: #fff;
-	background-color: #0D5E10;
+	background-color: #024b3a;
 }
 
 .nav-pills .nav-link {
@@ -80,7 +80,7 @@ h6 {
 
 .with-arrow .nav-link.active {
 	position: relative;
-	background: #0d5b5e;
+	background: #024b3a;
 }
 
 .with-arrow .nav-link.active::after {
@@ -452,7 +452,7 @@ section.pricing {
 .pricing .card-price {
 	font-size: 3rem;
 	margin: 0;
-	color: #0d5b5e;
+	color: #024b3a;
 }
 
 .pricing .card-price .period {
@@ -793,12 +793,12 @@ section.pricing {
 }
 
 .blog-home2 .bg-info-gradiant {
-	background: #0D5E10;
-	background: -webkit-linear-gradient(legacy-direction(to right), #0D5E10 0%, rgb(16, 177, 21) 100%);
-	background: -webkit-gradient(linear, left top, right top, from(#0D5E10), to(rgb(16, 177, 21)));
-	background: -webkit-linear-gradient(left, #0D5E10 0%, rgb(16, 177, 21) 100%);
-	background: -o-linear-gradient(left, #0D5E10 0%, rgb(16, 177, 21) 100%);
-	background: linear-gradient(to right, #0D5E10 0%, rgb(16, 177, 21) 100%);
+	background: #024b3a;
+	background: -webkit-linear-gradient(legacy-direction(to right), #024b3a 0%, rgb(16, 177, 21) 100%);
+	background: -webkit-gradient(linear, left top, right top, from(#024b3a), to(rgb(16, 177, 21)));
+	background: -webkit-linear-gradient(left, #024b3a 0%, rgb(16, 177, 21) 100%);
+	background: -o-linear-gradient(left, #024b3a 0%, rgb(16, 177, 21) 100%);
+	background: linear-gradient(to right, #024b3a 0%, rgb(16, 177, 21) 100%);
 }
 
 /*************************  Welcome Section Start  ****************************/
@@ -962,7 +962,7 @@ body .cp-welcome-content p {
 .pillars-islam .features-box i {
 	vertical-align: middle;
 	border-style: none;
-	color: #0d5b5e;
+	color: #024b3a;
 }
 
 /*************************  Pillars Of Islam Section End  ****************************/
@@ -1095,7 +1095,7 @@ blockquote.quote-card {
 }
 
 .quote-card.green-card {
-	background: #0D5E10;
+	background: #024b3a;
 	color: #ffffff;
 	box-shadow: 0 1px 2px rgba(34, 34, 34, 0.12), 0 2px 4px rgba(34, 34, 34, 0.24);
 }

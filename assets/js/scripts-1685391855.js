@@ -126,7 +126,7 @@
     var options = {
       enabled: true,
       chatButtonSetting: {
-        backgroundColor: "#247a1f",
+        backgroundColor: "#024b3a",
         ctaText: "",
         borderRadius: "25",
         marginLeft: "0",
@@ -139,7 +139,7 @@
         brandSubTitle: "Carlow Islamic Cultural Centre",
         brandImg: "https://carlowmasjid.ie/assets/images/logo.png",
         welcomeText: "As-salamu alaikum! How may I help you?",
-        backgroundColor: "#0a5f54",
+        backgroundColor: "#595FB0",
         ctaText: "Start Chat",
         borderRadius: "25",
         autoShow: false,
