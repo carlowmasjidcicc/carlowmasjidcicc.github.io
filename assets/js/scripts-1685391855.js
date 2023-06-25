@@ -137,7 +137,7 @@
       brandSetting: {
         brandName: "Carlow Masjid",
         brandSubTitle: "Carlow Islamic Cultural Centre",
-        brandImg: "https://traleemasjidkicc.ie/assets/images/logo.png",
+        brandImg: "https://carlowmasjid.ie/assets/images/logo.png",
         welcomeText: "As-salamu alaikum! How may I help you?",
         backgroundColor: "#0a5f54",
         ctaText: "Start Chat",
