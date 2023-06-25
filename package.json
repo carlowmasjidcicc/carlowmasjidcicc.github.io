@@ -1,0 +1,25 @@
+{
+  "name": "cicc-carlow-masjid",
+  "version": "0.0.1",
+  "description": "Carlow Islamic Cultural Centre website.",
+  "main": "index.html",
+  "repository": "git@github.com:carlowmasjidcicc/carlowmasjidcicc.github.io.git",
+  "author": "Nazmul Alam <hello@nalam.me>",
+  "license": "Apache License 2.0",
+  "private": true,
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.19.1"
+  },
+  "devDependencies": {
+    "browser-sync": "2.29.1",
+    "gulp": "4.0.2"
+  },
+  "scripts": {
+    "start": "npx gulp",
+    "verify": "yarn install --check-files",
+    "preci": "rm -fr node_modules",
+    "ci": "yarn install --frozen-lockfile",
+    "postinstall": "yarn start"
+  }
+}
