@@ -48,74 +48,7 @@
     }
   };
 
-  const setSalahTimes = () => {
-    var xmlhttp = new XMLHttpRequest();
-    var today = getToday();
-    var addedDays = addDays(today, 3);
-    xmlhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        var myObj = JSON.parse(this.responseText);
-        if (window.location.href.endsWith(`/`)) {
-          document.getElementById("fajr").innerHTML =
-            myObj.dailyPrayers[today.getDate() - 1].fajarTime.toLowerCase();
-          document.getElementById("sunrise").innerHTML =
-            myObj.dailyPrayers[today.getDate() - 1].sunriseTime.toLowerCase();
-          document.getElementById("dhuhr").innerHTML =
-            myObj.dailyPrayers[today.getDate() - 1].dhuharTime.toLowerCase();
-          document.getElementById("asr").innerHTML =
-            myObj.dailyPrayers[today.getDate() - 1].asrTime.toLowerCase();
-          document.getElementById("maghrib").innerHTML =
-            myObj.dailyPrayers[today.getDate() - 1].maghribTime.toLowerCase();
-          document.getElementById("isha").innerHTML =
-            myObj.dailyPrayers[today.getDate() - 1].ishaTime.toLowerCase();
-          document.getElementById("cur-month").innerHTML =
-            addedDays.toLocaleString("default", { month: "long" });
-          // document.getElementById("cur-month").innerHTML = "Ramadan";
-        }
-        document.getElementById("nav-hijri").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].hijriDate;
-        document.getElementById("nav-cur-month").innerHTML =
-          addedDays.toLocaleString("default", { month: "long" });
-        document.getElementById("footer-cur-month").innerHTML =
-          addedDays.toLocaleString("default", { month: "long" });
-        // document.getElementById("nav-cur-month").innerHTML = "Ramadan";
-        // document.getElementById("footer-cur-month").innerHTML = "Ramadan";
-
-        document.getElementById("nav-fajr-begins").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].fajarTime.toLowerCase();
-        document.getElementById("nav-fajr-jamaat").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].fajarJamahTime.toLowerCase();
-
-        document.getElementById("nav-sunrise").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].sunriseTime.toLowerCase();
-
-        document.getElementById("nav-zohr-begins").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].dhuharTime.toLowerCase();
-        document.getElementById("nav-zohr-jamaat").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].zohrJamahTime.toLowerCase();
-
-        document.getElementById("nav-asar-begins").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].asrTime.toLowerCase();
-        document.getElementById("nav-asar-jamaat").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].asarJamahTime.toLowerCase();
-
-        document.getElementById("nav-magrib-begins").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].maghribTime.toLowerCase();
-        document.getElementById("nav-magrib-jamaat").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].magribJamahTime.toLowerCase();
-
-        document.getElementById("nav-isha-begins").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].ishaTime.toLowerCase();
-        document.getElementById("nav-isha-jamaat").innerHTML =
-          myObj.dailyPrayers[today.getDate() - 1].ishaJamahTime.toLowerCase();
-      }
-    };
-    var asset = getAssetName(getToday(), `json`);
-    console.log(asset);
-    xmlhttp.open("GET", asset, true);
-    xmlhttp.send();
-  };
-
+  
   const showWhatsAppButton = () => {
     var url =
       "https://wati-integration-service.clare.ai/ShopifyWidget/shopifyWidget.js?69866";
@@ -304,7 +237,6 @@
   window.onload = () => {
     setFooterYear();
     setSalahTimeUrl();
-    setSalahTimes();
     showCookiePolicy();
 
     if (window.location.href.endsWith(`/`)) {
