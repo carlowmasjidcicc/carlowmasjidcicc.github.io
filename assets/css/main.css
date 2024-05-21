@@ -1000,6 +1000,16 @@ blockquote.quote-card {
 	margin: 0 0 0;
 }
 
+.gfm-embed {
+	display: flex;
+    flex-direction: column;
+    height: 540px !important;
+}
+
+.gfm-embed-iframe {
+    flex: 1 !important; /* Iframe takes up the remaining space */
+}
+
 .quote-card a:link {
 	color: #FFF;
 	text-decoration: none;
