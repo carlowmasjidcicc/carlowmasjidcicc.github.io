@@ -48,7 +48,6 @@
     }
   };
 
-  
   const showWhatsAppButton = () => {
     var url =
       "https://wati-integration-service.clare.ai/ShopifyWidget/shopifyWidget.js?69866";
@@ -76,7 +75,7 @@
         ctaText: "Start Chat",
         borderRadius: "25",
         autoShow: false,
-        phoneNumber: "353894567493",
+        phoneNumber: "353876843077",
       },
     };
     s.onload = function () {
