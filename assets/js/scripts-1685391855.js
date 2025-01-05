@@ -40,9 +40,6 @@
       // const asset = `assets/pdf/Ramadan2023.pdf`;
       document.getElementById("salah-times").href = asset;
       document.getElementById("salah-times-footer").href = asset;
-      if (window.location.href.endsWith(`/`)) {
-        document.getElementById("salah-times-body").href = asset;
-      }
     } catch (error) {
       console.error(`Error loading salah times ${error}`);
     }
