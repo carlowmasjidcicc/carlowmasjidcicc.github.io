@@ -482,11 +482,28 @@ section.pricing {
 
 /* Hover Effects on Card */
 
-
 .bg-cover-2 {
-	background: url(../images/bg/bg-home.jpg) no-repeat center bottom;
-	background-size: cover !important;
-	min-height: 50vh;
+    position: relative;
+    background: url(../images/bg/bg-window.jpg) no-repeat center bottom;
+    background-size: cover !important;
+	min-height: 100vh;
+    z-index: 1;
+    /* Ensure content is above the overlay */
+}
+
+.bg-cover-2::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(89, 95, 176, 0.5); /* Adjust opacity as needed */
+    z-index: 2;
+    pointer-events: none; /* Allows clicks to pass through */
+}
+
+/* Ensure child content is above the overlay */
+.bg-cover-2 > * {
+    position: relative;
+    z-index: 3;
 }
 
 .modal-dialog {
