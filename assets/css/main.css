@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Aladin|Ubuntu:300,400,500,600,700,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kodchasan&family=Playwrite+DE+Grund:wght@100..400&display=swap');
 
 /* GLOBALS START */
 body {
-	font-family: 'Ubuntu', sans-serif;
+	font-family: "Kodchasan", sans-serif;
+	font-weight: 400;
+	font-style: normal;
 }
 
 h1,
@@ -11,7 +13,10 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: 'Aladin', cursive;
+	font-family: "Playwrite DE Grund", cursive;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
 }
 
 /* GLOBALS END */
@@ -724,9 +729,10 @@ section.pricing {
 }
 
 .blog-home2 {
-	font-family: "Montserrat", sans-serif;
+	font-family: "Cal Sans", sans-serif;
 	color: #8d97ad;
-	font-weight: 300;
+	font-weight: 400;
+	font-style: normal;
 }
 
 .blog-home2 h1,
@@ -849,7 +855,6 @@ body .cp-welcome-content p {
 .section-title h2,
 .cp-welcome h2,
 .blog-home2 h2 {
-	font-family: 'Cinzel Decorative', cursive;
 	font-size: 48px;
 	font-weight: 700;
 	margin: 5px 0 0 0;
@@ -948,13 +953,11 @@ body .cp-welcome-content p {
 }
 
 .salah-times .text-box h2 {
-	font-family: 'Cinzel Decorative', cursive;
 	font-size: 15px;
 	font-weight: bold;
 }
 
 .pillars-islam .text-box h2 {
-	font-family: 'Cinzel Decorative', cursive;
 	font-size: 25px;
 }
 
@@ -1011,12 +1014,13 @@ blockquote.quote-card {
 
 .gfm-embed {
 	display: flex;
-    flex-direction: column;
-    height: 540px !important;
+	flex-direction: column;
+	height: 540px !important;
 }
 
 .gfm-embed-iframe {
-    flex: 1 !important; /* Iframe takes up the remaining space */
+	flex: 1 !important;
+	/* Iframe takes up the remaining space */
 }
 
 .quote-card a:link {
@@ -1071,7 +1075,6 @@ blockquote.quote-card {
 }
 
 .quote-card:before {
-	font-family: Georgia, serif;
 	content: "“";
 	position: absolute;
 	top: 10px;
@@ -1082,7 +1085,6 @@ blockquote.quote-card {
 }
 
 .quote-card:after {
-	font-family: Georgia, serif;
 	content: "”";
 	position: absolute;
 	bottom: -110px;
