@@ -72,7 +72,7 @@
         ctaText: "Start Chat",
         borderRadius: "25",
         autoShow: false,
-        phoneNumber: "353876843077",
+        phoneNumber: "353870913763",
       },
     };
     s.onload = function () {
