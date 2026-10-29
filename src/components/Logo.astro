@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import officialLogo from "../assets/images/cicc-logo.png";
+
 interface Props {
   compact?: boolean;
 }
@@ -7,22 +10,15 @@ const { compact = false } = Astro.props;
 ---
 
 <span class:list={["brand", { compact }]}>
-  <svg
+  <Image
     class="brand-mark"
-    viewBox="0 0 56 56"
-    aria-hidden="true"
-  >
-    <path
-      class="arch"
-      d="M8 49V29C8 17.4 17 8 28 8s20 9.4 20 21v20H8Z"
-    ></path>
-    <path class="door" d="M18 49V31c0-6.2 4.5-11 10-11s10 4.8 10 11v18"></path>
-    <path
-      class="crescent"
-      d="M34.8 10.4a9.4 9.4 0 1 1-11.2-7.7 8 8 0 1 0 11.2 7.7Z"
-    ></path>
-    <path class="base" d="M4 49h48"></path>
-  </svg>
+    src={officialLogo}
+    alt=""
+    width={128}
+    quality={90}
+    loading="eager"
+    decoding="async"
+  />
   <span class="brand-copy">
     <strong>Carlow Masjid</strong>
     <span>Cultural Centre</span>
@@ -38,28 +34,10 @@ const { compact = false } = Astro.props;
   }
 
   .brand-mark {
-    width: 2.65rem;
-    height: 2.65rem;
+    width: 3.2rem;
+    height: 3.2rem;
     flex: 0 0 auto;
-    overflow: visible;
-  }
-
-  .arch {
-    fill: rgba(23, 125, 103, 0.12);
-    stroke: currentColor;
-    stroke-width: 2;
-  }
-
-  .door,
-  .base {
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-width: 2;
-  }
-
-  .crescent {
-    fill: var(--color-gold);
+    object-fit: contain;
   }
 
   .brand-copy {
