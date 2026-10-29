@@ -9,6 +9,7 @@ import {
   timetableColumns,
   timetableMonths,
 } from "../src/data/prayer-times";
+import { site } from "../src/data/site";
 import { getPrayerState } from "../src/utils/prayer-time";
 
 const routes = [
@@ -199,6 +200,19 @@ for (const route of routes) {
   });
 }
 
+test("the footer credits the website designer", async ({ page }) => {
+  for (const route of ["/index.html", "/contact.html"]) {
+    await page.goto(route);
+    const credit = page.locator('footer a[href="https://nalam.me"]');
+    await expect(credit).toHaveText("Nazmul Alam");
+    await expect(credit).toHaveAttribute("target", "_blank");
+    await expect(credit).toHaveAttribute("rel", "noopener noreferrer");
+    await expect(page.locator("footer")).toContainText(
+      "Website designed & maintained by",
+    );
+  }
+});
+
 test("all internal page links resolve", async ({ page, request }) => {
   const internalLinks = new Set<string>();
 
@@ -367,10 +381,10 @@ test("analytics loads only after the visitor opts in", async ({ page }) => {
   ).toBe("granted");
 });
 
-test("the Google Map loads only after a visitor requests it", async ({
+test("the contact page shows the Carlow Masjid Google Map", async ({
   page,
 }) => {
-  await page.route(/https:\/\/www\.google\.com\/maps\?.*/, async (route) => {
+  await page.route(/https:\/\/www\.google\.com\/maps\/embed.*/, async (route) => {
     await route.fulfill({
       contentType: "text/html",
       body: "<!doctype html><title>Map test</title>",
@@ -379,19 +393,16 @@ test("the Google Map loads only after a visitor requests it", async ({
   await page.goto("/contact.html");
 
   const frame = page.locator("[data-map-frame]");
-  const placeholder = page.locator("[data-map-placeholder]");
-  await expect(frame).toBeHidden();
-  await expect(placeholder).toBeVisible();
-  await expect(frame).not.toHaveAttribute("src", /.+/);
-
-  await page.locator("[data-load-map]").click();
-
+  await expect(page.locator("[data-load-map]")).toHaveCount(0);
+  await expect(page.locator("[data-map-placeholder]")).toHaveCount(0);
   await expect(frame).toBeVisible();
-  await expect(placeholder).toBeHidden();
-  await expect(frame).toHaveAttribute(
-    "src",
-    /^https:\/\/www\.google\.com\/maps\?/,
+  await expect(frame).toHaveAttribute("src", site.mapEmbedUrl);
+  await expect(frame).toHaveAttribute("src", /52\.8350646/);
+  await expect(page.locator(".map-directions")).toHaveAttribute(
+    "href",
+    site.directionsUrl,
   );
+  expect(site.directionsUrl).toContain(`query_place_id=${site.mapPlaceId}`);
 });
 
 test("the latest confirmed bank details are published", async ({ page }) => {

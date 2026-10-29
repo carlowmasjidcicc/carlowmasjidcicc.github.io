@@ -66,6 +66,6 @@ is `carlowmasjid.ie`, kept in both root `CNAME` (picked up by GitHub Pages) and
 `public/CNAME` (copied into the deployed site).
 
 Google Analytics is consent-first and remains unloaded until a visitor opts in.
-The Google Map is also click-to-load. The website does not embed social widgets
-or payment scripts. The contact form posts to the existing public Formspree
-endpoint only after a visitor submits it.
+The contact page embeds Google Maps for Carlow Masjid. The website does not
+embed social widgets or payment scripts. The contact form posts to the existing
+public Formspree endpoint only after a visitor submits it.

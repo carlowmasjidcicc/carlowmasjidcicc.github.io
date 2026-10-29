@@ -72,7 +72,19 @@ const currentYear = new Date().getFullYear();
   </div>
 
   <div class="container footer-meta">
-    <p>© {currentYear} {site.name}</p>
+    <div class="footer-credit">
+      <p>© {currentYear} {site.name}</p>
+      <p>
+        Website designed &amp; maintained by
+        <a
+          href={site.designer.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {site.designer.name}
+        </a>
+      </p>
+    </div>
     <p>
       Company no. {site.companyNumber}
       <span aria-hidden="true"> · </span>
@@ -196,9 +208,20 @@ const currentYear = new Date().getFullYear();
     margin: 0;
   }
 
+  .footer-credit {
+    display: grid;
+    gap: 0.35rem;
+  }
+
   @media (max-width: 58rem) {
     .footer-grid {
       grid-template-columns: 1.5fr 1fr;
+    }
+  }
+
+  @media (max-width: 48rem) {
+    .site-footer {
+      padding-bottom: 5.75rem;
     }
   }
 
