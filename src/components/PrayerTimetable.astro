@@ -1,0 +1,916 @@
+---
+import Icon from "./Icon.astro";
+import {
+  prayerLabels,
+  prayerTimetableMeta,
+  timetableColumns,
+  timetableMonths,
+} from "../data/prayer-times";
+---
+
+<section class="timetable-explorer" aria-labelledby="timetable-title" data-timetable-explorer>
+  <div class="explorer-heading">
+    <div>
+      <p class="eyebrow">Verified timetable</p>
+      <h2 id="timetable-title">Choose the detail you need.</h2>
+      <p>
+        Move between one day, a seven-day week and the full month without
+        leaving the page.
+      </p>
+    </div>
+    <div class="view-switcher" role="group" aria-label="Timetable view">
+      <button type="button" data-view-button="day" aria-pressed="true">
+        Day
+      </button>
+      <button type="button" data-view-button="week" aria-pressed="false">
+        Week
+      </button>
+      <button type="button" data-view-button="month" aria-pressed="false">
+        Month
+      </button>
+    </div>
+  </div>
+
+  <div class="date-controls">
+    <button class="date-step" type="button" data-previous-date aria-label="Previous period">
+      <span aria-hidden="true">←</span>
+      Previous
+    </button>
+    <label class="date-picker">
+      <span>Choose date</span>
+      <input
+        type="date"
+        min={prayerTimetableMeta.coverageStart}
+        max={prayerTimetableMeta.coverageEnd}
+        value={prayerTimetableMeta.coverageStart}
+        data-date-picker
+      />
+    </label>
+    <button class="button button--outline button--small" type="button" data-today>
+      Today
+    </button>
+    <button class="date-step" type="button" data-next-date aria-label="Next period">
+      Next
+      <span aria-hidden="true">→</span>
+    </button>
+  </div>
+
+  <div class="view-panel" data-view-panel="day">
+    <div class="panel-heading">
+      <div>
+        <span class="tag" data-day-status>Selected day</span>
+        <h3 data-day-heading>Daily prayer starts</h3>
+      </div>
+      <a class="text-link" href="#source-note">About these times</a>
+    </div>
+
+    <div class="day-grid">
+      {
+        timetableColumns.map((name) => (
+          <article
+            class:list={[
+              "day-time-card",
+              { "day-time-card--sunrise": name === "sunrise" },
+            ]}
+            data-day-card={name}
+          >
+            <span>{name === "sunrise" ? "Solar time" : "Prayer start"}</span>
+            <h4>{prayerLabels[name]}</h4>
+            <time data-day-time>--:--</time>
+            <small data-day-state hidden></small>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="view-panel" data-view-panel="week" hidden>
+    <div class="panel-heading">
+      <div>
+        <span class="tag">Seven-day view</span>
+        <h3 data-week-heading>Week</h3>
+      </div>
+      <p>Friday and the selected date are clearly marked.</p>
+    </div>
+    <div class="table-wrap timetable-table-wrap">
+      <table class="data-table timetable-table">
+        <caption class="visually-hidden" data-week-caption>
+          Seven-day prayer start timetable
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            {
+              timetableColumns.map((name) => (
+                <th scope="col">{prayerLabels[name]}</th>
+              ))
+            }
+          </tr>
+        </thead>
+        <tbody data-week-body></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="view-panel" data-view-panel="month" hidden>
+    <div class="panel-heading panel-heading--month">
+      <div>
+        <span class="tag">Full month</span>
+        <h3 data-month-heading>Monthly prayer starts</h3>
+      </div>
+      <div class="month-actions">
+        <label>
+          <span>Published month</span>
+          <select data-month-picker>
+            {
+              timetableMonths.map((month) => (
+                <option value={month.value}>{month.label}</option>
+              ))
+            }
+          </select>
+        </label>
+        <a
+          class="button button--outline button--small"
+          href={timetableMonths[0].pdf}
+          data-month-download
+          download
+        >
+          <Icon name="download" size={17} />
+          Download PDF
+        </a>
+      </div>
+    </div>
+    <div class="table-wrap timetable-table-wrap">
+      <table class="data-table timetable-table">
+        <caption class="visually-hidden" data-month-caption>
+          Monthly prayer start timetable
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            {
+              timetableColumns.map((name) => (
+                <th scope="col">{prayerLabels[name]}</th>
+              ))
+            }
+          </tr>
+        </thead>
+        <tbody data-month-body></tbody>
+      </table>
+    </div>
+  </div>
+
+  <aside class="source-note" id="source-note" aria-labelledby="source-note-title">
+    <Icon name="info" size={21} />
+    <div>
+      <strong id="source-note-title">What these times mean</strong>
+      <p>
+        These are prayer start times and sunrise for Carlow, reproduced from
+        timetables prepared by {prayerTimetableMeta.source}. The supplied
+        documents do not include jama’ah or Jumu’ah times. All times are local
+        Carlow wall-clock times ({prayerTimetableMeta.timezone}), including the
+        daylight-saving change on 25 October 2026.
+      </p>
+    </div>
+  </aside>
+
+  <noscript>
+    <div class="noscript-downloads">
+      <strong>Download the published monthly timetables</strong>
+      <ul>
+        {
+          timetableMonths.map((month) => (
+            <li><a href={month.pdf}>{month.label} PDF</a></li>
+          ))
+        }
+      </ul>
+    </div>
+  </noscript>
+</section>
+
+<script>
+  import {
+    addDays,
+    getMonthDays,
+    getWeekDays,
+    prayerLabels,
+    prayerTimetableByDate,
+    prayerTimetableMeta,
+    timetableColumns,
+    timetableMonths,
+    type PrayerDay,
+    type TimetableColumn,
+  } from "../data/prayer-times";
+  import { getDublinParts, getPrayerState } from "../utils/prayer-time";
+
+  type ViewName = "day" | "week" | "month";
+
+  const fullDateFormatter = new Intl.DateTimeFormat("en-IE", {
+    timeZone: "Europe/Dublin",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  const shortDateFormatter = new Intl.DateTimeFormat("en-IE", {
+    timeZone: "Europe/Dublin",
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+  const monthFormatter = new Intl.DateTimeFormat("en-IE", {
+    timeZone: "Europe/Dublin",
+    month: "long",
+    year: "numeric",
+  });
+
+  const formatDate = (date: string, formatter: Intl.DateTimeFormat) =>
+    formatter.format(new Date(`${date}T12:00:00Z`));
+
+  const clampDate = (date: string) => {
+    if (date < prayerTimetableMeta.coverageStart) {
+      return prayerTimetableMeta.coverageStart;
+    }
+    if (date > prayerTimetableMeta.coverageEnd) {
+      return prayerTimetableMeta.coverageEnd;
+    }
+    return prayerTimetableByDate.has(date)
+      ? date
+      : prayerTimetableMeta.coverageStart;
+  };
+
+  const shiftMonth = (date: string, amount: number) => {
+    const [year, month] = date.split("-").map(Number);
+    const shifted = new Date(Date.UTC(year, month - 1 + amount, 1));
+    return clampDate(shifted.toISOString().slice(0, 10));
+  };
+
+  const createDateButton = (day: PrayerDay) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.selectDate = day.date;
+    button.textContent = shortDateFormatter.format(
+      new Date(`${day.date}T12:00:00Z`),
+    );
+    button.setAttribute(
+      "aria-label",
+      `View ${fullDateFormatter.format(new Date(`${day.date}T12:00:00Z`))}`,
+    );
+    return button;
+  };
+
+  const createTimetableRow = (
+    day: PrayerDay,
+    selectedDate: string,
+    today: string,
+  ) => {
+    const row = document.createElement("tr");
+    const parsed = new Date(`${day.date}T12:00:00Z`);
+    const isFriday = parsed.getUTCDay() === 5;
+    row.classList.toggle("is-friday", isFriday);
+    row.classList.toggle("is-selected", day.date === selectedDate);
+    row.classList.toggle("is-today", day.date === today);
+
+    const heading = document.createElement("th");
+    heading.scope = "row";
+    heading.append(createDateButton(day));
+    if (isFriday) {
+      const marker = document.createElement("small");
+      marker.textContent = "Friday";
+      heading.append(marker);
+    }
+    row.append(heading);
+
+    timetableColumns.forEach((name) => {
+      const cell = document.createElement("td");
+      const time = document.createElement("time");
+      time.dateTime = day[name];
+      time.textContent = day[name];
+      time.setAttribute("aria-label", `${prayerLabels[name]} ${day[name]}`);
+      cell.append(time);
+      row.append(cell);
+    });
+
+    return row;
+  };
+
+  document
+    .querySelectorAll<HTMLElement>("[data-timetable-explorer]")
+    .forEach((explorer) => {
+      const datePicker =
+        explorer.querySelector<HTMLInputElement>("[data-date-picker]");
+      const monthPicker =
+        explorer.querySelector<HTMLSelectElement>("[data-month-picker]");
+      const previousButton =
+        explorer.querySelector<HTMLButtonElement>("[data-previous-date]");
+      const nextButton =
+        explorer.querySelector<HTMLButtonElement>("[data-next-date]");
+      const todayButton =
+        explorer.querySelector<HTMLButtonElement>("[data-today]");
+      const params = new URLSearchParams(window.location.search);
+      const requestedDate = params.get("date");
+      const requestedView = params.get("view");
+      const today = getDublinParts(new Date()).date;
+      let selectedDate = clampDate(
+        requestedDate && prayerTimetableByDate.has(requestedDate)
+          ? requestedDate
+          : today,
+      );
+      let activeView: ViewName =
+        requestedView === "week" || requestedView === "month"
+          ? requestedView
+          : "day";
+
+      const updateUrl = () => {
+        const url = new URL(window.location.href);
+        url.searchParams.set("view", activeView);
+        url.searchParams.set("date", selectedDate);
+        window.history.replaceState({}, "", url);
+      };
+
+      const renderDay = () => {
+        const day = prayerTimetableByDate.get(selectedDate);
+        if (!day) return;
+        const heading = explorer.querySelector<HTMLElement>("[data-day-heading]");
+        const status = explorer.querySelector<HTMLElement>("[data-day-status]");
+        if (heading) heading.textContent = formatDate(day.date, fullDateFormatter);
+        if (status) {
+          status.textContent =
+            day.date === today ? "Today" : "Selected day";
+        }
+
+        const liveState = day.date === today ? getPrayerState(new Date()) : null;
+        explorer.querySelectorAll<HTMLElement>("[data-day-card]").forEach((card) => {
+          const name = card.dataset.dayCard as TimetableColumn | undefined;
+          if (!name || !timetableColumns.includes(name)) return;
+          const time = card.querySelector<HTMLTimeElement>("[data-day-time]");
+          const badge = card.querySelector<HTMLElement>("[data-day-state]");
+          const isCurrent =
+            name !== "sunrise" && liveState?.current?.name === name;
+          const isNext = name !== "sunrise" && liveState?.next?.name === name;
+
+          if (time) {
+            time.textContent = day[name];
+            time.dateTime = day[name];
+          }
+          card.classList.toggle("is-current", isCurrent);
+          card.classList.toggle("is-next", isNext);
+          if (badge) {
+            badge.hidden = !isCurrent && !isNext;
+            badge.textContent = isCurrent ? "Current" : isNext ? "Next" : "";
+          }
+        });
+      };
+
+      const renderWeek = () => {
+        const days = getWeekDays(selectedDate);
+        const body = explorer.querySelector<HTMLTableSectionElement>(
+          "[data-week-body]",
+        );
+        const heading =
+          explorer.querySelector<HTMLElement>("[data-week-heading]");
+        const caption =
+          explorer.querySelector<HTMLElement>("[data-week-caption]");
+        if (!body || days.length === 0) return;
+        body.replaceChildren(
+          ...days.map((day) => createTimetableRow(day, selectedDate, today)),
+        );
+        const first = days[0];
+        const last = days.at(-1);
+        if (!first || !last) return;
+        const label = `${shortDateFormatter.format(new Date(`${first.date}T12:00:00Z`))} – ${shortDateFormatter.format(new Date(`${last.date}T12:00:00Z`))}`;
+        if (heading) heading.textContent = label;
+        if (caption) caption.textContent = `Prayer start timetable for ${label}`;
+      };
+
+      const renderMonth = () => {
+        const month = selectedDate.slice(0, 7);
+        const days = getMonthDays(month);
+        const body = explorer.querySelector<HTMLTableSectionElement>(
+          "[data-month-body]",
+        );
+        const heading =
+          explorer.querySelector<HTMLElement>("[data-month-heading]");
+        const caption =
+          explorer.querySelector<HTMLElement>("[data-month-caption]");
+        const download =
+          explorer.querySelector<HTMLAnchorElement>("[data-month-download]");
+        const monthInfo = timetableMonths.find(({ value }) => value === month);
+        if (!body || !monthInfo) return;
+        body.replaceChildren(
+          ...days.map((day) => createTimetableRow(day, selectedDate, today)),
+        );
+        const label = monthFormatter.format(
+          new Date(`${month}-15T12:00:00Z`),
+        );
+        if (heading) heading.textContent = label;
+        if (caption) caption.textContent = `${label} prayer start timetable`;
+        if (monthPicker) monthPicker.value = month;
+        if (download) download.href = monthInfo.pdf;
+      };
+
+      const render = () => {
+        if (datePicker) datePicker.value = selectedDate;
+        explorer
+          .querySelectorAll<HTMLButtonElement>("[data-view-button]")
+          .forEach((button) => {
+            button.setAttribute(
+              "aria-pressed",
+              String(button.dataset.viewButton === activeView),
+            );
+          });
+        explorer
+          .querySelectorAll<HTMLElement>("[data-view-panel]")
+          .forEach((panel) => {
+            panel.hidden = panel.dataset.viewPanel !== activeView;
+          });
+
+        renderDay();
+        renderWeek();
+        renderMonth();
+
+        const step = activeView === "week" ? 7 : 1;
+        const previousDate =
+          activeView === "month"
+            ? shiftMonth(selectedDate, -1)
+            : clampDate(addDays(selectedDate, -step));
+        const nextDate =
+          activeView === "month"
+            ? shiftMonth(selectedDate, 1)
+            : clampDate(addDays(selectedDate, step));
+        if (previousButton) previousButton.disabled = previousDate === selectedDate;
+        if (nextButton) nextButton.disabled = nextDate === selectedDate;
+        if (todayButton) {
+          todayButton.disabled = !prayerTimetableByDate.has(today);
+        }
+        updateUrl();
+      };
+
+      explorer
+        .querySelectorAll<HTMLButtonElement>("[data-view-button]")
+        .forEach((button) => {
+          button.addEventListener("click", () => {
+            const view = button.dataset.viewButton;
+            if (view === "day" || view === "week" || view === "month") {
+              activeView = view;
+              render();
+            }
+          });
+        });
+
+      datePicker?.addEventListener("change", () => {
+        selectedDate = clampDate(datePicker.value);
+        render();
+      });
+      monthPicker?.addEventListener("change", () => {
+        selectedDate = `${monthPicker.value}-01`;
+        render();
+      });
+      previousButton?.addEventListener("click", () => {
+        selectedDate =
+          activeView === "month"
+            ? shiftMonth(selectedDate, -1)
+            : clampDate(addDays(selectedDate, activeView === "week" ? -7 : -1));
+        render();
+      });
+      nextButton?.addEventListener("click", () => {
+        selectedDate =
+          activeView === "month"
+            ? shiftMonth(selectedDate, 1)
+            : clampDate(addDays(selectedDate, activeView === "week" ? 7 : 1));
+        render();
+      });
+      todayButton?.addEventListener("click", () => {
+        if (prayerTimetableByDate.has(today)) {
+          selectedDate = today;
+          render();
+        }
+      });
+      explorer.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const button = target.closest<HTMLButtonElement>("[data-select-date]");
+        if (!button?.dataset.selectDate) return;
+        selectedDate = button.dataset.selectDate;
+        activeView = "day";
+        render();
+        explorer.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      render();
+    });
+</script>
+
+<style is:global>
+  .timetable-explorer {
+    scroll-margin-top: 1rem;
+  }
+
+  .explorer-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .explorer-heading h2 {
+    max-width: 14ch;
+    margin: 0.55rem 0 0.75rem;
+  }
+
+  .explorer-heading > div:first-child > p:last-child {
+    max-width: 44rem;
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .view-switcher {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0.3rem;
+    background: var(--color-mist);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+  }
+
+  .view-switcher button {
+    min-width: 5.5rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.9rem;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .view-switcher button[aria-pressed="true"] {
+    color: white;
+    background: var(--color-emerald-dark);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .date-controls {
+    display: grid;
+    grid-template-columns: auto minmax(12rem, 1fr) auto auto;
+    align-items: end;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: white;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .date-step {
+    min-height: 3rem;
+    padding: 0.65rem 0.85rem;
+    color: var(--color-emerald-dark);
+    background: transparent;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
+
+  .date-step:disabled,
+  .date-controls .button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  .date-picker {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .date-picker span,
+  .month-actions label > span {
+    color: var(--color-text-muted);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .date-picker input,
+  .month-actions select {
+    min-height: 3rem;
+    padding: 0.6rem 0.8rem;
+    color: var(--color-ink);
+    background: white;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-sm);
+  }
+
+  .view-panel {
+    margin-top: 1rem;
+    padding: clamp(1.25rem, 4vw, 2.25rem);
+    background: var(--color-mist);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-xl);
+  }
+
+  .view-panel[hidden] {
+    display: none;
+  }
+
+  .panel-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .panel-heading h3 {
+    margin: 0.6rem 0 0;
+    font-size: clamp(1.65rem, 3vw, 2.45rem);
+  }
+
+  .panel-heading > p {
+    max-width: 25rem;
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .text-link {
+    flex: 0 0 auto;
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .day-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  .day-time-card {
+    display: grid;
+    min-height: 11rem;
+    padding: 1.15rem;
+    background: white;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+
+  .day-time-card > span {
+    color: var(--color-text-muted);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .day-time-card h4 {
+    margin: 0.4rem 0 0;
+  }
+
+  .day-time-card time {
+    align-self: end;
+    margin-top: 1rem;
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .day-time-card small {
+    width: fit-content;
+    margin-top: 0.55rem;
+    padding: 0.18rem 0.48rem;
+    color: white;
+    background: var(--color-emerald);
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .day-time-card--sunrise {
+    background: #fff8e8;
+    border-color: #e4cc92;
+  }
+
+  .day-time-card.is-current,
+  .day-time-card.is-next {
+    border-color: var(--color-emerald);
+    box-shadow: inset 0 0 0 1px var(--color-emerald);
+  }
+
+  .day-time-card.is-next small {
+    color: var(--color-ink);
+    background: var(--color-gold);
+  }
+
+  .month-actions {
+    display: flex;
+    align-items: end;
+    gap: 0.65rem;
+  }
+
+  .month-actions label {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .timetable-table-wrap {
+    max-height: 43rem;
+    background: white;
+  }
+
+  .timetable-table {
+    min-width: 49rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timetable-table thead {
+    position: sticky;
+    z-index: 3;
+    top: 0;
+  }
+
+  .timetable-table th,
+  .timetable-table td {
+    min-width: auto;
+    padding: 0.72rem 0.8rem;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .timetable-table th:first-child {
+    position: sticky;
+    z-index: 2;
+    left: 0;
+    min-width: 9.75rem;
+    text-align: left;
+    background: white;
+  }
+
+  .timetable-table thead th:first-child {
+    z-index: 4;
+    background: var(--color-mist);
+  }
+
+  .timetable-table th button {
+    display: block;
+    padding: 0;
+    color: var(--color-ink);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-weight: 850;
+    text-align: left;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.22em;
+  }
+
+  .timetable-table th button:hover {
+    color: var(--color-emerald);
+    text-decoration-color: currentColor;
+  }
+
+  .timetable-table th small {
+    display: block;
+    width: fit-content;
+    margin-top: 0.2rem;
+    padding: 0.08rem 0.35rem;
+    color: var(--color-emerald-dark);
+    background: var(--color-mint);
+    border-radius: 999px;
+    font-size: 0.56rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .timetable-table tbody tr.is-friday > * {
+    background: #f5fbf8;
+  }
+
+  .timetable-table tbody tr.is-selected > * {
+    box-shadow: inset 0 2px 0 var(--color-emerald), inset 0 -2px 0 var(--color-emerald);
+  }
+
+  .timetable-table tbody tr.is-today th:first-child::after {
+    content: "Today";
+    display: inline-block;
+    margin-top: 0.2rem;
+    color: var(--color-emerald);
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .source-note {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    padding: 1.1rem 1.2rem;
+    color: #513f1f;
+    background: #fff8e8;
+    border: 1px solid #e4cc92;
+    border-radius: var(--radius-md);
+  }
+
+  .source-note strong {
+    display: block;
+  }
+
+  .source-note p {
+    margin: 0.2rem 0 0;
+  }
+
+  .noscript-downloads {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: white;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+
+  @media (max-width: 53rem) {
+    .explorer-heading {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .view-switcher {
+      width: 100%;
+    }
+
+    .date-controls {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .date-picker {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+
+    .date-controls [data-today] {
+      grid-column: 1 / -1;
+    }
+
+    .day-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .panel-heading,
+    .panel-heading--month {
+      align-items: start;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 35rem) {
+    .view-switcher button {
+      min-width: 0;
+    }
+
+    .day-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .day-time-card {
+      grid-template-columns: 1fr auto;
+      min-height: 0;
+      align-items: center;
+    }
+
+    .day-time-card h4 {
+      grid-column: 1;
+    }
+
+    .day-time-card time {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      margin: 0;
+    }
+
+    .day-time-card small {
+      grid-column: 1 / -1;
+    }
+
+    .month-actions {
+      display: grid;
+      width: 100%;
+    }
+
+    .month-actions .button {
+      width: 100%;
+    }
+
+    .source-note {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

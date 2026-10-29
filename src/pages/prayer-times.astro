@@ -1,22 +1,39 @@
 ---
 import Icon from "../components/Icon.astro";
 import PrayerPanel from "../components/PrayerPanel.astro";
+import PrayerTimetable from "../components/PrayerTimetable.astro";
+import { prayerTimetableMeta, timetableMonths } from "../data/prayer-times";
 import { site } from "../data/site";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
   title="Prayer times"
-  description="Verified prayer and Jumu'ah timetable information for Carlow Islamic Cultural Centre."
+  description="Verified daily, weekly and monthly prayer start times for Carlow from October 2026 through January 2027."
 >
   <header class="page-hero">
     <div class="container page-hero__content">
       <p class="eyebrow">Prayer at Carlow Masjid</p>
-      <h1>Clear times, without guesswork.</h1>
+      <h1>Clear prayer times, exactly as supplied.</h1>
       <p class="lede">
-        This page will publish prayer starts, congregation times and Jumu'ah
-        details only when they have been verified by the centre.
+        Browse verified Carlow prayer starts by day, week or month. Today’s
+        current and next prayer are highlighted automatically using local Irish
+        time.
       </p>
+      <div class="button-row">
+        <a class="button" href="#timetable">
+          <Icon name="calendar" size={18} />
+          Browse timetable
+        </a>
+        <a
+          class="button button--outline"
+          href={timetableMonths[0].pdf}
+          download
+        >
+          <Icon name="download" size={18} />
+          Download October PDF
+        </a>
+      </div>
     </div>
   </header>
 
@@ -26,56 +43,21 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     </div>
   </section>
 
-  <section class="section section--soft" aria-labelledby="published-title">
+  <section class="section section--soft" id="timetable">
     <div class="container">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">The useful details</p>
-          <h2 id="published-title">What the timetable will include.</h2>
-        </div>
-        <p>
-          Prayer starts and congregation times are different. The redesigned
-          timetable keeps them visibly separate and includes a clear update
-          date.
-        </p>
-      </div>
-      <div class="card-grid">
-        <article class="card">
-          <span class="icon-disc"><Icon name="clock" size={23} /></span>
-          <h3>Daily prayers</h3>
-          <p>
-            Fajr, Dhuhr, Asr, Maghrib and Isha with separate start and
-            congregation columns.
-          </p>
-        </article>
-        <article class="card">
-          <span class="icon-disc"><Icon name="people" size={23} /></span>
-          <h3>Jumu'ah</h3>
-          <p>
-            Each verified Friday prayer time, with seasonal changes made
-            explicit.
-          </p>
-        </article>
-        <article class="card">
-          <span class="icon-disc"><Icon name="calendar" size={23} /></span>
-          <h3>Monthly view</h3>
-          <p>
-            An accessible table for the month, with a PDF offered only as an
-            optional download.
-          </p>
-        </article>
-      </div>
+      <PrayerTimetable />
     </div>
   </section>
 
-  <section class="section" aria-labelledby="help-title">
-    <div class="container two-column prayer-help">
+  <section class="section" aria-labelledby="guidance-title">
+    <div class="container guidance-layout">
       <div class="content-stack">
-        <p class="eyebrow">Before you travel</p>
-        <h2 id="help-title">Need today's time now?</h2>
+        <p class="eyebrow">Read before travelling</p>
+        <h2 id="guidance-title">Starts and congregation times are different.</h2>
         <p class="lede">
-          Call or message the centre directly. This is the reliable option
-          until a current timetable is supplied.
+          The four supplied timetables contain Fajr, sunrise, Dhuhr, Asr,
+          Maghrib and Isha start times. They do not contain jama’ah or Jumu’ah
+          times, so the website does not invent or imply them.
         </p>
         <div class="button-row">
           <a class="button" href={site.phoneHref}>
@@ -89,65 +71,90 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             rel="noopener noreferrer"
           >
             <Icon name="message" size={18} />
-            WhatsApp
+            Ask about jama’ah
           </a>
         </div>
       </div>
 
-      <div class="faq-list">
-        <details>
-          <summary>Why are calculated times not shown?</summary>
-          <p>
-            Calculation services can provide approximate prayer starts, but
-            they do not know Carlow Masjid's congregation or Jumu'ah schedule.
-            Publishing estimates as centre times could mislead visitors.
-          </p>
-        </details>
-        <details>
-          <summary>Where are the old PDF timetables?</summary>
-          <p>
-            The repository's available PDFs are from 2025. They have been
-            removed from the current visitor journey so an outdated timetable
-            cannot be mistaken for today's schedule.
-          </p>
-        </details>
-        <details>
-          <summary>Will a PDF be available again?</summary>
-          <p>
-            Yes, when a verified current timetable is supplied. The accessible
-            web timetable will remain the primary format.
-          </p>
-        </details>
-      </div>
+      <dl class="timetable-facts">
+        <div>
+          <dt>Published coverage</dt>
+          <dd>1 October 2026–31 January 2027</dd>
+        </div>
+        <div>
+          <dt>Timezone</dt>
+          <dd>{prayerTimetableMeta.timezone} · Irish local time</dd>
+        </div>
+        <div>
+          <dt>Prepared by</dt>
+          <dd>{prayerTimetableMeta.source}</dd>
+        </div>
+        <div>
+          <dt>Not included</dt>
+          <dd>Jama’ah and Jumu’ah times</dd>
+        </div>
+      </dl>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .prayer-help {
-    align-items: start;
-  }
-
-  .faq-list {
+  .guidance-layout {
     display: grid;
-    gap: 0.75rem;
+    grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
+    align-items: start;
+    gap: clamp(2rem, 7vw, 6rem);
   }
 
-  details {
-    padding: 1.1rem 1.2rem;
+  .guidance-layout h2 {
+    max-width: 15ch;
+  }
+
+  .timetable-facts {
+    margin: 0;
+    overflow: hidden;
     background: white;
     border: 1px solid var(--color-line);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
   }
 
-  summary {
-    color: var(--color-ink);
-    cursor: pointer;
-    font-weight: 800;
+  .timetable-facts div {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.7fr) minmax(0, 1.3fr);
+    gap: 1rem;
+    padding: 1rem 1.15rem;
+    border-bottom: 1px solid var(--color-line);
   }
 
-  details p {
-    margin: 0.85rem 0 0;
+  .timetable-facts div:last-child {
+    border-bottom: 0;
+  }
+
+  .timetable-facts dt {
     color: var(--color-text-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .timetable-facts dd {
+    margin: 0;
+    color: var(--color-ink);
+    font-weight: 750;
+  }
+
+  @media (max-width: 50rem) {
+    .guidance-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .timetable-facts div {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
   }
 </style>

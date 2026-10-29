@@ -61,11 +61,11 @@ export const bankDetails = {
 } as const;
 
 export const prayerInformation = {
-  status: "Awaiting a verified timetable",
+  status: "Verified timetable published",
   summary:
-    "Current prayer and Jumu'ah times have not yet been supplied in a verified format.",
+    "Daily prayer start times and sunrise are available from October 2026 through January 2027.",
   detail:
-    "We do not publish calculated or estimated times as though they are the centre's congregation times. Please contact the centre before travelling.",
+    "The supplied timetable does not include jama’ah or Jumu’ah times. Contact the centre before travelling if you need congregation details.",
 } as const;
 
 export const programmes = [

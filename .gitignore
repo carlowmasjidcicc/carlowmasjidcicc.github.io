@@ -1,6 +1,7 @@
 node_modules/
 .astro/
 dist/
+public/timetables/*.pdf
 test-results/
 playwright-report/
 blob-report/

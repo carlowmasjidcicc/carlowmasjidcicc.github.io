@@ -30,13 +30,24 @@ rather than changing individual pages.
 
 Operational information follows a no-guessing policy:
 
-- Prayer and Jumu'ah times are published only from a centre-verified timetable.
+- Prayer times are reproduced only from supplied, verified timetables.
+- Jama’ah and Jumu’ah times are not implied when the source does not include them.
 - Bank details are published only after the latest account is confirmed.
 - Unverified schedules include a direct contact fallback.
 - Dated notices should be removed or updated when they expire.
 
 Page templates live in `src/pages/`, shared components in `src/components/`,
 and the visual system in `src/styles/global.css`.
+
+### Prayer timetable
+
+[`src/data/prayer-times.ts`](src/data/prayer-times.ts) contains the 123 verified
+daily rows from October 2026 through January 2027. The values are prayer starts
+and sunrise in `Europe/Dublin` wall-clock time; they are not jama’ah times.
+
+`npm run generate:prayer-pdfs` creates the four branded, downloadable PDFs in
+`public/timetables/`. The normal build runs this generator automatically so the
+website and PDFs always use the same source data.
 
 ## Deployment
 
