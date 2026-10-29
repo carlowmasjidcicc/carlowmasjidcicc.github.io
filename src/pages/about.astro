@@ -1,0 +1,430 @@
+---
+import { Image } from "astro:assets";
+import Icon from "../components/Icon.astro";
+import { site } from "../data/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import exterior from "../assets/images/centre-exterior.jpeg";
+import prayerHall from "../assets/images/prayer-hall.jpeg";
+import defaultTeamMember from "../assets/images/team/team-default.jpeg";
+import imamHafid from "../assets/images/team/team-imam-hafid.png";
+import treasurer from "../assets/images/team/team-treasurer.png";
+import trustee from "../assets/images/team/team-trustee.png";
+
+const teamMembers = [
+  { name: "Hafid Tribak", role: "Imam", image: imamHafid },
+  { name: "Muhammad Yousaf", role: "Trustee", image: trustee },
+  { name: "Ahmed Ghirfani", role: "Treasurer", image: treasurer },
+  { name: "Abderrahim Elaasri", role: "Member", image: defaultTeamMember },
+  { name: "Sayed Alam", role: "Member", image: defaultTeamMember },
+  {
+    name: "Nazmul Alam",
+    role: "Technical Specialist",
+    image: defaultTeamMember,
+  },
+] as const;
+---
+
+<BaseLayout
+  title="About"
+  description="The mission, history and community role of Carlow Islamic Cultural Centre."
+  image={prayerHall.src}
+>
+  <header class="page-hero">
+    <div class="container page-hero__content">
+      <p class="eyebrow">About CICC</p>
+      <h1>A spiritual home with a community purpose.</h1>
+      <p class="lede">
+        Carlow Islamic Cultural Centre brings together worship, education,
+        cultural understanding and practical community connection.
+      </p>
+    </div>
+  </header>
+
+  <section class="section" aria-labelledby="mission-title">
+    <div class="container two-column">
+      <div class="content-stack">
+        <p class="eyebrow">Our mission</p>
+        <h2 id="mission-title">Faith that strengthens belonging.</h2>
+        <p class="lede">
+          CICC exists to provide a welcoming place for prayer and learning while
+          supporting community development, education, cultural exchange and
+          social inclusion in Carlow.
+        </p>
+        <p>
+          The centre serves Muslims in Carlow and the surrounding area, and
+          seeks to build understanding and positive relationships across the
+          wider community.
+        </p>
+      </div>
+      <div class="media-frame media-frame--arch">
+        <Image
+          src={prayerHall}
+          alt="A community gathering in the Carlow Masjid prayer hall"
+          width={960}
+          quality={82}
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="story-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Our story</p>
+          <h2 id="story-title">Growing with Carlow since 2014.</h2>
+        </div>
+        <p>
+          The centre's published history describes a community that organised
+          around worship first, then expanded education and community activity
+          as local families grew.
+        </p>
+      </div>
+
+      <ol class="timeline">
+        <li>
+          <span>2014</span>
+          <div>
+            <h3>CICC was formed</h3>
+            <p>
+              The organisation was established and rented premises for regular
+              congregational prayer.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>Growing needs</span>
+          <div>
+            <h3>Learning became central</h3>
+            <p>
+              Children's Islamic education, Qur'an learning and programmes for
+              adults developed alongside daily worship.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>Today</span>
+          <div>
+            <h3>Planning a permanent home</h3>
+            <p>
+              The community is fundraising for a larger mosque and Islamic
+              school with room to serve future generations.
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="community-title">
+    <div class="container two-column">
+      <div class="media-frame">
+        <Image
+          src={exterior}
+          alt="The Carlow Islamic Cultural Centre building"
+          width={1024}
+          quality={82}
+          loading="lazy"
+        />
+      </div>
+      <div class="content-stack">
+        <p class="eyebrow">Community involvement</p>
+        <h2 id="community-title">Open, connected and locally rooted.</h2>
+        <p class="lede">
+          Religious and educational programmes sit alongside social support and
+          opportunities to build relationships in Carlow.
+        </p>
+        <ul class="check-list">
+          <li>Daily worship and Friday prayer</li>
+          <li>Learning for children and adults</li>
+          <li>Community gatherings and seasonal programmes</li>
+          <li>Marriage, funeral and counselling support</li>
+          <li>Intercommunity connection and social inclusion</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" id="our-team" aria-labelledby="team-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Our team</p>
+          <h2 id="team-title">People serving Carlow’s community.</h2>
+        </div>
+        <p>
+          The centre’s team supports worship, governance and day-to-day
+          operations. Public enquiries are routed through the shared centre
+          contact.
+        </p>
+      </div>
+
+      <div class="team-grid">
+        {
+          teamMembers.map((member) => (
+            <article class="team-card">
+              <div class="team-card__portrait">
+                <Image
+                  src={member.image}
+                  alt=""
+                  width={320}
+                  height={320}
+                  quality={86}
+                  loading="lazy"
+                />
+              </div>
+              <p>{member.role}</p>
+              <h3>{member.name}</h3>
+              <a href={`mailto:${site.email}`}>
+                <Icon name="mail" size={16} />
+                Contact via CICC
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="governance-title">
+    <div class="container governance-grid">
+      <div>
+        <p class="eyebrow">Governance</p>
+        <h2 id="governance-title">A transparent community organisation.</h2>
+        <p class="lede">
+          The centre’s public identifiers and shared contact details are
+          available here for clear, accountable communication.
+        </p>
+      </div>
+      <dl class="governance-card">
+        <div>
+          <dt>Legal name</dt>
+          <dd>{site.legalName}</dd>
+        </div>
+        <div>
+          <dt>Company number</dt>
+          <dd>{site.companyNumber}</dd>
+        </div>
+        <div>
+          <dt>Registered Charity Number</dt>
+          <dd>{site.registeredCharityNumber}</dd>
+        </div>
+        <div>
+          <dt>General contact</dt>
+          <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="join-title">
+    <div class="container join-panel">
+      <div>
+        <p class="eyebrow eyebrow--light">Connect with CICC</p>
+        <h2 id="join-title">Visit, learn or lend a hand.</h2>
+        <p>
+          Whether you are new to Carlow, looking for a class or interested in
+          supporting the mosque project, start by contacting the centre.
+        </p>
+      </div>
+      <div class="button-row">
+        <a class="button button--gold" href="/contact.html">
+          Visit & contact <Icon name="arrow" size={18} />
+        </a>
+        <a class="button button--ghost-light" href="/activities.html">
+          Explore programmes
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: steps;
+  }
+
+  .timeline li {
+    min-height: 18rem;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .timeline li > span {
+    display: inline-block;
+    color: var(--color-link);
+    font-size: 0.72rem;
+    font-weight: 850;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .timeline h3 {
+    margin: 4rem 0 0.75rem;
+  }
+
+  .timeline p {
+    color: var(--color-text-muted);
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .team-card {
+    display: grid;
+    justify-items: center;
+    padding: clamp(1.5rem, 4vw, 2.35rem);
+    text-align: center;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .team-card__portrait {
+    width: 8.5rem;
+    aspect-ratio: 1;
+    overflow: hidden;
+    padding: 0.35rem;
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-line);
+    border-radius: 50%;
+  }
+
+  .team-card__portrait :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  .team-card p {
+    margin: 1.2rem 0 0;
+    color: var(--color-link);
+    font-size: 0.7rem;
+    font-weight: 850;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .team-card h3 {
+    margin: 0.4rem 0 1.1rem;
+  }
+
+  .team-card a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .governance-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(22rem, 0.8fr);
+    align-items: start;
+    gap: clamp(2rem, 7vw, 6rem);
+  }
+
+  .governance-grid h2 {
+    max-width: 17ch;
+    margin: 0.65rem 0 1rem;
+  }
+
+  .governance-card {
+    margin: 0;
+    padding: clamp(1.4rem, 4vw, 2.5rem);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .governance-card div {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .governance-card div:last-child {
+    border-bottom: 0;
+  }
+
+  .governance-card dt {
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .governance-card dd {
+    margin: 0.2rem 0 0;
+    color: var(--color-heading);
+    font-weight: 750;
+  }
+
+  .join-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 3rem;
+    padding: clamp(1.5rem, 5vw, 4rem);
+    color: rgba(255, 255, 255, 0.72);
+    background:
+      radial-gradient(circle at 90% 10%, rgba(37, 151, 121, 0.25), transparent 35%),
+      var(--color-ink);
+    border-radius: var(--radius-xl);
+  }
+
+  .join-panel h2 {
+    margin: 0.6rem 0 1rem;
+    color: white;
+  }
+
+  .join-panel p:not(.eyebrow) {
+    max-width: 42rem;
+  }
+
+  @media (max-width: 55rem) {
+    .timeline {
+      grid-template-columns: 1fr;
+    }
+
+    .timeline li {
+      min-height: auto;
+    }
+
+    .timeline h3 {
+      margin-top: 2rem;
+    }
+
+    .governance-grid,
+    .join-panel {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .team-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .team-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

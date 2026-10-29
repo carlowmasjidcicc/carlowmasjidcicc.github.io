@@ -1,0 +1,183 @@
+---
+import Icon from "./Icon.astro";
+
+const options = [
+  { value: "light", label: "Light", icon: "sun" },
+  { value: "dark", label: "Dark", icon: "moon" },
+  { value: "system", label: "System", icon: "monitor" },
+] as const;
+---
+
+<div class="theme-switcher" data-theme-switcher>
+  <span class="visually-hidden" id="theme-switcher-label">Colour theme</span>
+  <div
+    class="theme-switcher__options"
+    role="group"
+    aria-labelledby="theme-switcher-label"
+  >
+    {
+      options.map((option) => (
+        <button
+          type="button"
+          class="theme-option"
+          data-theme-option={option.value}
+          aria-label={`${option.label} theme`}
+          aria-pressed="false"
+          title={`${option.label} theme`}
+        >
+          <Icon name={option.icon} size={15} />
+          <span class="theme-option__label">{option.label}</span>
+        </button>
+      ))
+    }
+  </div>
+  <span
+    class="visually-hidden"
+    data-theme-announcement
+    aria-live="polite"
+  ></span>
+</div>
+
+<script>
+  const storageKey = "cicc-theme-preference";
+  const root = document.documentElement;
+  const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+  const preferences = ["light", "dark", "system"] as const;
+  type ThemePreference = (typeof preferences)[number];
+
+  const isPreference = (value: string | null): value is ThemePreference =>
+    preferences.includes(value as ThemePreference);
+
+  const storedPreference = (): ThemePreference => {
+    try {
+      const value = window.localStorage.getItem(storageKey);
+      return isPreference(value) ? value : "system";
+    } catch {
+      return "system";
+    }
+  };
+
+  const resolvedTheme = (preference: ThemePreference) =>
+    preference === "system"
+      ? systemDark.matches
+        ? "dark"
+        : "light"
+      : preference;
+
+  const updateControls = (preference: ThemePreference) => {
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-theme-option]")
+      .forEach((button) => {
+        button.setAttribute(
+          "aria-pressed",
+          String(button.dataset.themeOption === preference),
+        );
+      });
+  };
+
+  const applyTheme = (
+    preference: ThemePreference,
+    persist = false,
+    announce = false,
+  ) => {
+    const theme = resolvedTheme(preference);
+    root.dataset.theme = theme;
+    root.dataset.themePreference = preference;
+    root.style.colorScheme = theme;
+
+    const themeColour = document.querySelector<HTMLMetaElement>(
+      'meta[name="theme-color"]',
+    );
+    if (themeColour) {
+      themeColour.content = theme === "dark" ? "#071a16" : "#fbfaf6";
+    }
+
+    updateControls(preference);
+
+    if (persist) {
+      try {
+        window.localStorage.setItem(storageKey, preference);
+      } catch {
+        // The selected theme still applies for this page if storage is blocked.
+      }
+    }
+
+    if (announce) {
+      document
+        .querySelectorAll<HTMLElement>("[data-theme-announcement]")
+        .forEach((element) => {
+          element.textContent = `${preference[0].toUpperCase()}${preference.slice(1)} theme selected.`;
+        });
+    }
+  };
+
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-theme-option]")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        const value = button.dataset.themeOption ?? "";
+        if (isPreference(value)) applyTheme(value, true, true);
+      });
+    });
+
+  systemDark.addEventListener("change", () => {
+    if (storedPreference() === "system") applyTheme("system");
+  });
+
+  applyTheme(storedPreference());
+</script>
+
+<style>
+  .theme-switcher {
+    flex: 0 0 auto;
+  }
+
+  .theme-switcher__options {
+    display: flex;
+    align-items: center;
+    gap: 0.16rem;
+    padding: 0.2rem;
+    background: var(--color-mist);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+  }
+
+  .theme-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.32rem;
+    min-width: 2rem;
+    min-height: 2rem;
+    padding: 0.35rem 0.48rem;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .theme-option:hover {
+    color: var(--color-heading);
+  }
+
+  .theme-option[aria-pressed="true"] {
+    color: var(--color-heading);
+    background: var(--color-surface-raised);
+    box-shadow: 0 0.15rem 0.55rem rgba(7, 26, 22, 0.12);
+  }
+
+  @media (max-width: 40rem) {
+    .theme-option {
+      width: 2rem;
+      padding-inline: 0;
+    }
+
+    .theme-option__label {
+      display: none;
+    }
+  }
+</style>

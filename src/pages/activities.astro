@@ -1,0 +1,178 @@
+---
+import Icon from "../components/Icon.astro";
+import { programmes, services, site } from "../data/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="What's on"
+  description="Published weekly classes, learning programmes and community services at Carlow Islamic Cultural Centre."
+>
+  <header class="page-hero">
+    <div class="container page-hero__content">
+      <p class="eyebrow">Learn and connect</p>
+      <h1>What's on at Carlow Masjid.</h1>
+      <p class="lede">
+        A simpler view of recurring classes and community services, with one
+        clear place to confirm details.
+      </p>
+      <div class="button-row">
+        <a
+          class="button"
+          href={site.whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="message" size={18} />
+          Confirm on WhatsApp
+        </a>
+        <a class="button button--outline" href="/contact.html">Contact the centre</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section section--compact">
+    <div class="container">
+      <div class="notice notice--sand">
+        <Icon name="info" size={21} />
+        <div>
+          <strong>Please confirm before travelling</strong>
+          <p>
+            These times reflect the previously published recurring schedule.
+            Seasonal prayer changes can affect after-salah programmes, and the
+            Friday tafseer time was inconsistent in the old site.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section programmes-section" aria-labelledby="weekly-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Recurring programmes</p>
+          <h2 id="weekly-title">The week at a glance.</h2>
+        </div>
+        <p>
+          Audience, subject and timing are presented together, so you can
+          quickly decide what is relevant.
+        </p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th scope="col">Programme</th>
+              <th scope="col">Published schedule</th>
+              <th scope="col">For</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              programmes.map((programme) => (
+                <tr>
+                  <th scope="row">{programme.name}</th>
+                  <td>{programme.schedule}</td>
+                  <td><span class="tag">{programme.audience}</span></td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="services-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">How we serve</p>
+          <h2 id="services-title">Support across community life.</h2>
+        </div>
+        <p>
+          For marriage, funeral support, counselling or a service not listed,
+          contact the centre directly so the right person can respond.
+        </p>
+      </div>
+      <div class="card-grid">
+        {
+          services.map((service) => (
+            <article class="card">
+              <span class="icon-disc"><Icon name={service.icon} size={23} /></span>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="notices-title">
+    <div class="container notice-panel">
+      <div>
+        <p class="eyebrow">Current notices</p>
+        <h2 id="notices-title">No dated notices are published here yet.</h2>
+        <p class="lede">
+          We will not present old fundraising posters or undated announcements
+          as current news. Contact the centre or check its Facebook page for
+          the latest update.
+        </p>
+      </div>
+      <div class="button-row">
+        <a
+          class="button"
+          href="https://www.facebook.com/CarlowCICC/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Visit Facebook <Icon name="external" size={17} />
+        </a>
+        <a class="button button--outline" href={site.phoneHref}>
+          <Icon name="phone" size={17} />
+          Call the centre
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .programmes-section {
+    padding-top: 1rem;
+  }
+
+  .notice-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 3rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    background: var(--color-sand);
+    border-radius: var(--radius-xl);
+  }
+
+  .notice-panel h2 {
+    max-width: 18ch;
+    margin: 0.6rem 0 1rem;
+  }
+
+  .notice-panel .button-row {
+    display: grid;
+    min-width: 13rem;
+  }
+
+  @media (max-width: 50rem) {
+    .notice-panel {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .notice-panel .button-row {
+      width: 100%;
+    }
+  }
+</style>

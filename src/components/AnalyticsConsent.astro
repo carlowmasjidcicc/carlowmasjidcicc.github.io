@@ -1,0 +1,226 @@
+---
+import { site } from "../data/site";
+---
+
+<aside
+  class="consent-panel"
+  aria-labelledby="consent-title"
+  data-analytics-consent
+  data-analytics-id={site.googleAnalyticsId}
+  hidden
+>
+  <div>
+    <p class="eyebrow">Your privacy</p>
+    <h2 id="consent-title">Help us improve the website?</h2>
+    <p>
+      With your permission, Google Analytics will measure site usage. Analytics
+      stays off unless you allow it.
+    </p>
+  </div>
+  <div class="consent-actions">
+    <button class="button button--gold" type="button" data-analytics-allow>
+      Allow analytics
+    </button>
+    <button class="button button--outline" type="button" data-analytics-decline>
+      Decline
+    </button>
+    <a href="/privacy.html">Privacy details</a>
+  </div>
+</aside>
+
+<script>
+  type ConsentChoice = "granted" | "denied";
+  type AnalyticsWindow = Window & { dataLayer?: unknown[][] };
+
+  const storageKey = "cicc-analytics-consent-v1";
+  const consentPanel = document.querySelector<HTMLElement>(
+    "[data-analytics-consent]",
+  );
+  const analyticsId = consentPanel?.dataset.analyticsId;
+  const analyticsWindow = window as AnalyticsWindow;
+  let currentChoice: ConsentChoice | null = null;
+
+  const readChoice = (): ConsentChoice | null => {
+    try {
+      const stored = window.localStorage.getItem(storageKey);
+      return stored === "granted" || stored === "denied" ? stored : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const saveChoice = (choice: ConsentChoice) => {
+    try {
+      window.localStorage.setItem(storageKey, choice);
+    } catch {
+      // Consent remains session-only when browser storage is unavailable.
+    }
+  };
+
+  const gtag = (...args: unknown[]) => {
+    analyticsWindow.dataLayer ??= [];
+    analyticsWindow.dataLayer.push(args);
+  };
+
+  const loadAnalytics = () => {
+    if (
+      !analyticsId ||
+      !/^G-[A-Z0-9]{6,14}$/.test(analyticsId) ||
+      document.querySelector("[data-google-analytics]")
+    ) {
+      return;
+    }
+
+    gtag("consent", "default", {
+      analytics_storage: "granted",
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+    });
+    gtag("js", new Date());
+    gtag("config", analyticsId, {
+      anonymize_ip: true,
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+    });
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(analyticsId)}`;
+    script.dataset.googleAnalytics = "true";
+    document.head.append(script);
+  };
+
+  const removeAnalyticsCookies = () => {
+    const host = window.location.hostname;
+    const registrableDomain = host.split(".").slice(-2).join(".");
+    const domains = new Set([host, `.${registrableDomain}`]);
+
+    document.cookie.split(";").forEach((cookie) => {
+      const name = cookie.split("=")[0]?.trim();
+      if (!name?.startsWith("_ga")) return;
+
+      document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax`;
+      domains.forEach((domain) => {
+        document.cookie = `${name}=; Max-Age=0; path=/; domain=${domain}; SameSite=Lax`;
+      });
+    });
+  };
+
+  const choose = (choice: ConsentChoice) => {
+    const previouslyGranted = currentChoice === "granted";
+    currentChoice = choice;
+    saveChoice(choice);
+
+    if (choice === "granted") {
+      loadAnalytics();
+      if (consentPanel) consentPanel.hidden = true;
+      return;
+    }
+
+    gtag("consent", "update", { analytics_storage: "denied" });
+    removeAnalyticsCookies();
+    if (previouslyGranted) {
+      window.location.reload();
+    } else if (consentPanel) {
+      consentPanel.hidden = true;
+    }
+  };
+
+  currentChoice = readChoice();
+  if (currentChoice === "granted") {
+    loadAnalytics();
+  } else if (currentChoice === null && consentPanel) {
+    consentPanel.hidden = false;
+  }
+
+  consentPanel
+    ?.querySelector<HTMLButtonElement>("[data-analytics-allow]")
+    ?.addEventListener("click", () => choose("granted"));
+  consentPanel
+    ?.querySelector<HTMLButtonElement>("[data-analytics-decline]")
+    ?.addEventListener("click", () => choose("denied"));
+
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-consent-settings]")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        if (consentPanel) consentPanel.hidden = false;
+      });
+    });
+</script>
+
+<style>
+  .consent-panel {
+    position: fixed;
+    z-index: 50;
+    right: 1rem;
+    bottom: 1rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 1.25rem;
+    width: min(46rem, calc(100% - 2rem));
+    padding: 1.25rem;
+    color: var(--color-text);
+    background: color-mix(
+      in srgb,
+      var(--color-surface-raised) 97%,
+      transparent
+    );
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(18px);
+  }
+
+  .consent-panel[hidden] {
+    display: none;
+  }
+
+  .consent-panel h2 {
+    margin: 0.4rem 0 0.45rem;
+    font-size: 1.25rem;
+  }
+
+  .consent-panel p:not(.eyebrow) {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+  }
+
+  .consent-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    min-width: 18rem;
+  }
+
+  .consent-actions .button {
+    min-height: 2.7rem;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.76rem;
+  }
+
+  .consent-actions > a {
+    grid-column: 1 / -1;
+    justify-self: center;
+    font-size: 0.72rem;
+    font-weight: 750;
+  }
+
+  @media (max-width: 48rem) {
+    .consent-panel {
+      right: 0.65rem;
+      bottom: 5.55rem;
+      left: 0.65rem;
+      grid-template-columns: 1fr;
+      width: auto;
+      padding: 1rem;
+    }
+
+    .consent-actions {
+      min-width: 0;
+    }
+  }
+</style>

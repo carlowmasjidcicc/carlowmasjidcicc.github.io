@@ -1,0 +1,70 @@
+---
+import Icon from "./Icon.astro";
+import { site } from "../data/site";
+---
+
+<nav class="mobile-actions" aria-label="Quick actions">
+  <a href="/prayer-times.html">
+    <Icon name="clock" size={19} />
+    <span>Prayer</span>
+  </a>
+  <a href={site.directionsUrl} target="_blank" rel="noopener noreferrer">
+    <Icon name="map" size={19} />
+    <span>Directions</span>
+  </a>
+  <a href={site.phoneHref}>
+    <Icon name="phone" size={19} />
+    <span>Call</span>
+  </a>
+  <a href="/projects.html#donate">
+    <Icon name="heart" size={19} />
+    <span>Donate</span>
+  </a>
+</nav>
+
+<style>
+  .mobile-actions {
+    position: fixed;
+    z-index: 30;
+    right: 0.65rem;
+    bottom: 0.65rem;
+    left: 0.65rem;
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0.35rem;
+    background: color-mix(in srgb, var(--color-ink) 94%, transparent);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 1.15rem;
+    box-shadow: 0 1.25rem 3rem rgba(5, 25, 21, 0.3);
+    backdrop-filter: blur(18px);
+  }
+
+  .mobile-actions a {
+    display: grid;
+    place-items: center;
+    gap: 0.16rem;
+    min-height: 3.35rem;
+    color: rgba(255, 255, 255, 0.78);
+    border-radius: 0.8rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .mobile-actions a:hover,
+  .mobile-actions a:focus-visible {
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-actions a:last-child {
+    color: var(--color-ink);
+    background: var(--color-gold);
+  }
+
+  @media (max-width: 48rem) {
+    .mobile-actions {
+      display: grid;
+    }
+  }
+</style>

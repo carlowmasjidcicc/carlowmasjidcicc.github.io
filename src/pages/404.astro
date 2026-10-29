@@ -1,0 +1,73 @@
+---
+import Icon from "../components/Icon.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The requested page could not be found."
+  noindex
+>
+  <section class="not-found">
+    <div class="container not-found__content">
+      <p class="error-code">404</p>
+      <p class="eyebrow eyebrow--light">Page not found</p>
+      <h1>This path does not lead to a page.</h1>
+      <p>
+        The link may be old or the address may have been typed incorrectly.
+        Use one of the direct routes below.
+      </p>
+      <div class="button-row">
+        <a class="button button--gold" href="/index.html">
+          <Icon name="home" size={18} />
+          Back to home
+        </a>
+        <a class="button button--ghost-light" href="/prayer-times.html">
+          Prayer information
+        </a>
+        <a class="button button--ghost-light" href="/contact.html">
+          Contact the centre
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    place-items: center;
+    min-height: 68vh;
+    padding-block: 5rem;
+    color: rgba(255, 255, 255, 0.72);
+    background:
+      radial-gradient(circle at 80% 20%, rgba(38, 155, 124, 0.3), transparent 34%),
+      var(--color-ink);
+  }
+
+  .not-found__content {
+    max-width: 48rem;
+  }
+
+  .error-code {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.08);
+    font-family: var(--font-display);
+    font-size: clamp(7rem, 25vw, 15rem);
+    font-weight: 900;
+    letter-spacing: -0.08em;
+    line-height: 0.72;
+  }
+
+  h1 {
+    max-width: 11ch;
+    margin: 0.75rem 0 1rem;
+    color: white;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+  }
+
+  .not-found__content > p:not(.error-code, .eyebrow) {
+    max-width: 38rem;
+    margin-bottom: 1.8rem;
+  }
+</style>

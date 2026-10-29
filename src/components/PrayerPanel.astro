@@ -1,0 +1,580 @@
+---
+import Icon from "./Icon.astro";
+import {
+  prayerLabels,
+  prayerNames,
+  prayerTimetableMeta,
+  timetableMonths,
+} from "../data/prayer-times";
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<section
+  class:list={["prayer-panel", { "prayer-panel--compact": compact }]}
+  aria-labelledby="prayer-panel-title"
+  data-prayer-panel
+>
+  <div data-prayer-content>
+    <div class="prayer-panel__top">
+      <div>
+        <p class="eyebrow eyebrow--light">
+          <span class="live-dot" aria-hidden="true"></span>
+          Verified prayer starts
+        </p>
+        <h2 id="prayer-panel-title" data-prayer-date>
+          Today’s prayer timetable
+        </h2>
+        <p>
+          Carlow · <span>{prayerTimetableMeta.timezone}</span>
+        </p>
+      </div>
+      <div class="local-clock">
+        <span>Carlow time</span>
+        <time data-local-clock>--:--</time>
+      </div>
+    </div>
+
+    <div class="prayer-focus">
+      <article class="focus-card">
+        <span>Current prayer period</span>
+        <strong data-current-name>—</strong>
+        <time data-current-time>--:--</time>
+        <small data-current-context>Start time</small>
+      </article>
+      <article class="focus-card focus-card--next">
+        <span>Next prayer</span>
+        <strong data-next-name>—</strong>
+        <time data-next-time>--:--</time>
+        <small data-next-countdown>Checking timetable…</small>
+      </article>
+      <article class="focus-card focus-card--sunrise">
+        <span><Icon name="sun" size={16} /> Sunrise</span>
+        <strong>Sunrise</strong>
+        <time data-sunrise-time>--:--</time>
+        <small>Not a prayer time</small>
+      </article>
+    </div>
+
+    <ol class="daily-prayers" aria-label="Today’s five prayer start times">
+      {
+        prayerNames.map((name) => (
+          <li data-prayer-item={name}>
+            <span>{prayerLabels[name]}</span>
+            <time data-prayer-time>--:--</time>
+            <small data-prayer-state hidden></small>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="prayer-panel__footer">
+      <p>
+        Start times from {prayerTimetableMeta.source}. Jama’ah and Jumu’ah times
+        were not supplied.
+      </p>
+      <div class="button-row">
+        {
+          compact && (
+            <a class="button button--light" href="/prayer-times.html">
+              <Icon name="calendar" size={18} />
+              Day, week & month
+            </a>
+          )
+        }
+        <a
+          class="button button--ghost-light"
+          href={timetableMonths[0].pdf}
+          data-current-pdf
+          download
+        >
+          <Icon name="download" size={18} />
+          Download month
+        </a>
+      </div>
+    </div>
+    <p class="visually-hidden" aria-live="polite" data-prayer-announcement></p>
+  </div>
+
+  <div class="prayer-unavailable" data-prayer-unavailable hidden>
+    <span class="status-icon" aria-hidden="true">
+      <Icon name="calendar" size={28} />
+    </span>
+    <div>
+      <p class="eyebrow eyebrow--light">Published coverage</p>
+      <h2>No verified timetable for today.</h2>
+      <p>
+        Verified start times are currently available from 1 October 2026 to 31
+        December 2027. No time will be estimated outside that range.
+      </p>
+      <a class="button button--light" href="/prayer-times.html">
+        Browse published months
+      </a>
+    </div>
+  </div>
+
+  <noscript>
+    <p class="prayer-noscript">
+      JavaScript is needed to match the timetable to the current Carlow date
+      and time. <a href="/prayer-times.html">Browse the full timetable</a>.
+    </p>
+  </noscript>
+</section>
+
+<script>
+  import {
+    prayerLabels,
+    prayerNames,
+    timetableMonths,
+  } from "../data/prayer-times";
+  import {
+    formatCountdown,
+    getDublinParts,
+    getPrayerState,
+  } from "../utils/prayer-time";
+
+  const longDateFormatter = new Intl.DateTimeFormat("en-IE", {
+    timeZone: "Europe/Dublin",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  const setText = (
+    root: HTMLElement,
+    selector: string,
+    value: string,
+  ) => {
+    const element = root.querySelector<HTMLElement>(selector);
+    if (element) element.textContent = value;
+  };
+
+  const updatePanel = (panel: HTMLElement) => {
+    const now = new Date();
+    const state = getPrayerState(now);
+    const content = panel.querySelector<HTMLElement>("[data-prayer-content]");
+    const unavailable = panel.querySelector<HTMLElement>(
+      "[data-prayer-unavailable]",
+    );
+
+    if (!state) {
+      if (content) content.hidden = true;
+      if (unavailable) unavailable.hidden = false;
+      return;
+    }
+
+    if (content) content.hidden = false;
+    if (unavailable) unavailable.hidden = true;
+
+    const local = getDublinParts(now);
+    const dateAtMidday = new Date(`${state.date}T12:00:00Z`);
+    setText(
+      panel,
+      "[data-prayer-date]",
+      longDateFormatter.format(dateAtMidday),
+    );
+    setText(
+      panel,
+      "[data-local-clock]",
+      `${String(local.hour).padStart(2, "0")}:${String(local.minute).padStart(2, "0")}`,
+    );
+    setText(panel, "[data-sunrise-time]", state.day.sunrise);
+
+    if (state.current) {
+      setText(panel, "[data-current-name]", prayerLabels[state.current.name]);
+      setText(panel, "[data-current-time]", state.current.time);
+      setText(
+        panel,
+        "[data-current-context]",
+        state.current.date === state.date ? "Started today" : "Started yesterday",
+      );
+    } else {
+      setText(panel, "[data-current-name]", "Not available");
+      setText(panel, "[data-current-time]", "—");
+      setText(panel, "[data-current-context]", "Coverage starts today");
+    }
+
+    if (state.next) {
+      setText(panel, "[data-next-name]", prayerLabels[state.next.name]);
+      setText(panel, "[data-next-time]", state.next.time);
+      const dayPrefix = state.next.date === state.date ? "" : "Tomorrow · ";
+      setText(
+        panel,
+        "[data-next-countdown]",
+        `${dayPrefix}${formatCountdown(state.next.epoch - now.getTime())}`,
+      );
+    } else {
+      setText(panel, "[data-next-name]", "Not published");
+      setText(panel, "[data-next-time]", "—");
+      setText(panel, "[data-next-countdown]", "End of verified coverage");
+    }
+
+    panel
+      .querySelectorAll<HTMLElement>("[data-prayer-item]")
+      .forEach((item) => {
+        const name = item.dataset.prayerItem;
+        if (!name || !prayerNames.includes(name as (typeof prayerNames)[number])) {
+          return;
+        }
+
+        const prayerName = name as (typeof prayerNames)[number];
+        const time = item.querySelector<HTMLTimeElement>("[data-prayer-time]");
+        const badge = item.querySelector<HTMLElement>("[data-prayer-state]");
+        const isCurrent =
+          state.current?.date === state.date &&
+          state.current.name === prayerName;
+        const isNext =
+          state.next?.date === state.date && state.next.name === prayerName;
+
+        if (time) {
+          time.textContent = state.day[prayerName];
+          time.dateTime = state.day[prayerName];
+        }
+        item.classList.toggle("is-current", isCurrent);
+        item.classList.toggle("is-next", isNext);
+        if (badge) {
+          badge.hidden = !isCurrent && !isNext;
+          badge.textContent = isCurrent ? "Current" : isNext ? "Next" : "";
+        }
+      });
+
+    const pdf = timetableMonths.find(({ value }) =>
+      state.date.startsWith(value),
+    );
+    const pdfLink =
+      panel.querySelector<HTMLAnchorElement>("[data-current-pdf]");
+    if (pdf && pdfLink) pdfLink.href = pdf.pdf;
+
+    const announcement =
+      panel.querySelector<HTMLElement>("[data-prayer-announcement]");
+    const announcementKey = `${state.date}:${state.next?.name ?? "none"}`;
+    if (announcement && panel.dataset.announcement !== announcementKey) {
+      panel.dataset.announcement = announcementKey;
+      announcement.textContent = state.next
+        ? `Next prayer: ${prayerLabels[state.next.name]} at ${state.next.time}.`
+        : "No later prayer is available in the verified timetable.";
+    }
+  };
+
+  const panels = document.querySelectorAll<HTMLElement>("[data-prayer-panel]");
+  panels.forEach(updatePanel);
+  window.setInterval(() => panels.forEach(updatePanel), 30_000);
+</script>
+
+<style>
+  .prayer-panel {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.25rem, 4vw, 3rem);
+    color: white;
+    background:
+      radial-gradient(circle at 90% -20%, rgba(60, 200, 161, 0.3), transparent 42%),
+      linear-gradient(135deg, var(--color-emerald-dark), var(--color-ink));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .prayer-panel::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    right: -5rem;
+    bottom: -7rem;
+    width: 17rem;
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 2rem rgba(255, 255, 255, 0.025),
+      0 0 0 4rem rgba(255, 255, 255, 0.018);
+    pointer-events: none;
+  }
+
+  .prayer-panel > div,
+  .prayer-panel noscript {
+    position: relative;
+    z-index: 1;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  .prayer-panel__top {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  h2 {
+    margin: 0.45rem 0 0.25rem;
+    color: white;
+    font-size: clamp(1.65rem, 3vw, 2.65rem);
+  }
+
+  p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .live-dot {
+    width: 0.48rem;
+    height: 0.48rem;
+    background: var(--color-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0.25rem rgba(211, 169, 83, 0.14);
+  }
+
+  .local-clock {
+    display: grid;
+    justify-items: end;
+  }
+
+  .local-clock span,
+  .focus-card > span {
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .local-clock time {
+    color: white;
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+  }
+
+  .prayer-focus {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .focus-card {
+    display: grid;
+    align-content: start;
+    min-height: 10.5rem;
+    padding: 1.15rem;
+    background: rgba(255, 255, 255, 0.065);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: var(--radius-md);
+  }
+
+  .focus-card strong {
+    margin-top: 0.55rem;
+    color: white;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+  }
+
+  .focus-card time {
+    margin-top: auto;
+    color: white;
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .focus-card small {
+    margin-top: 0.4rem;
+    color: rgba(255, 255, 255, 0.58);
+  }
+
+  .focus-card--next {
+    color: var(--color-ink);
+    background: var(--color-gold);
+    border-color: var(--color-gold);
+  }
+
+  .focus-card--next > span,
+  .focus-card--next small {
+    color: var(--color-ink);
+  }
+
+  .focus-card--next strong,
+  .focus-card--next time {
+    color: var(--color-ink);
+  }
+
+  .focus-card--sunrise > span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-gold-soft);
+  }
+
+  .daily-prayers {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.55rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .daily-prayers li {
+    position: relative;
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.8rem 0.85rem;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+  }
+
+  .daily-prayers li > span {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.75rem;
+  }
+
+  .daily-prayers time {
+    color: white;
+    font-size: 1.05rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+  }
+
+  .daily-prayers small {
+    width: fit-content;
+    margin-top: 0.25rem;
+    padding: 0.12rem 0.38rem;
+    color: var(--color-ink);
+    background: var(--color-gold);
+    border-radius: 999px;
+    font-size: 0.58rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .daily-prayers .is-current,
+  .daily-prayers .is-next {
+    border-color: rgba(211, 169, 83, 0.7);
+  }
+
+  .prayer-panel__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .prayer-panel__footer > p {
+    max-width: 38rem;
+    font-size: 0.76rem;
+  }
+
+  .prayer-panel__footer .button-row {
+    flex: 0 0 auto;
+  }
+
+  .prayer-unavailable {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    max-width: 46rem;
+  }
+
+  .prayer-unavailable h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  .prayer-unavailable .button {
+    margin-top: 1.25rem;
+  }
+
+  .status-icon {
+    display: grid;
+    place-items: center;
+    width: 3.3rem;
+    aspect-ratio: 1;
+    color: var(--color-gold);
+    background: rgba(211, 169, 83, 0.12);
+    border-radius: 50%;
+  }
+
+  .prayer-noscript {
+    padding-top: 1rem;
+  }
+
+  .prayer-noscript a {
+    color: white;
+  }
+
+  @media (max-width: 58rem) {
+    .prayer-focus {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .focus-card--sunrise {
+      grid-column: 1 / -1;
+      min-height: 8rem;
+    }
+
+    .daily-prayers {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .prayer-panel__footer {
+      align-items: start;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .prayer-panel {
+      border-radius: var(--radius-lg);
+    }
+
+    .prayer-panel__top {
+      align-items: start;
+    }
+
+    .local-clock {
+      display: none;
+    }
+
+    .prayer-focus {
+      grid-template-columns: 1fr;
+    }
+
+    .focus-card {
+      min-height: 9.5rem;
+    }
+
+    .focus-card--next {
+      order: -1;
+    }
+
+    .focus-card--sunrise {
+      grid-column: auto;
+    }
+
+    .daily-prayers {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .prayer-panel__footer .button-row,
+    .prayer-panel__footer .button {
+      width: 100%;
+    }
+
+    .prayer-unavailable {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

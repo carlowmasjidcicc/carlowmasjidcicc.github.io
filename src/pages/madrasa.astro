@@ -1,0 +1,125 @@
+---
+import { Image } from "astro:assets";
+import Icon from "../components/Icon.astro";
+import { site } from "../data/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import entrance from "../assets/images/centre-entrance.jpeg";
+---
+
+<BaseLayout
+  title="Children's madrasa"
+  description="Learning information and enquiries for the children's madrasa at Carlow Islamic Cultural Centre."
+  image={entrance.src}
+>
+  <header class="page-hero">
+    <div class="container page-hero__content">
+      <p class="eyebrow">Children's learning</p>
+      <h1>A nurturing foundation for faith and character.</h1>
+      <p class="lede">
+        The supplementary school supports Qur'an recitation, memorisation,
+        Islamic studies and good character in a caring community environment.
+      </p>
+      <div class="button-row">
+        <a
+          class="button"
+          href={site.whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="message" size={18} />
+          Ask about a place
+        </a>
+        <a class="button button--outline" href={`mailto:${site.email}`}>
+          <Icon name="mail" size={18} />
+          Email the madrasa
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section section--soft" aria-labelledby="learning-title">
+    <div class="container two-column">
+      <div class="media-frame media-frame--arch">
+        <Image
+          src={entrance}
+          alt="The entrance to Carlow Islamic Cultural Centre"
+          width={768}
+          quality={82}
+          loading="lazy"
+        />
+      </div>
+      <div class="content-stack">
+        <p class="eyebrow">Learning together</p>
+        <h2 id="learning-title">A partnership between madrasa and home.</h2>
+        <p class="lede">
+          The published programme describes a structured curriculum focused on
+          Islamic knowledge, Qur'an learning and positive behaviour.
+        </p>
+        <ul class="check-list">
+          <li>Islamic studies and everyday practice</li>
+          <li>Qur'an recitation and memorisation</li>
+          <li>Respect, care and good character</li>
+          <li>A supportive relationship with parents and guardians</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="enquiry-title">
+    <div class="container enquiry-panel">
+      <div>
+        <p class="eyebrow eyebrow--light">Madrasa enquiries</p>
+        <h2 id="enquiry-title">Start with a conversation.</h2>
+        <p>
+          Ask about age groups, level, term dates, fees, safeguarding,
+          availability and enrolment before making plans.
+        </p>
+      </div>
+      <div class="button-row">
+        <a class="button button--gold" href={site.phoneHref}>
+          <Icon name="phone" size={18} />
+          Call {site.phoneDisplay}
+        </a>
+        <a
+          class="button button--ghost-light"
+          href={site.whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Message the centre
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .enquiry-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 3rem;
+    padding: clamp(1.5rem, 5vw, 4rem);
+    color: rgba(255, 255, 255, 0.72);
+    background:
+      radial-gradient(circle at 90% 10%, rgba(37, 151, 121, 0.25), transparent 36%),
+      var(--color-ink);
+    border-radius: var(--radius-xl);
+  }
+
+  .enquiry-panel h2 {
+    margin: 0.6rem 0 1rem;
+    color: white;
+  }
+
+  .enquiry-panel p:not(.eyebrow) {
+    max-width: 43rem;
+  }
+
+  @media (max-width: 50rem) {
+    .enquiry-panel {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+  }
+</style>

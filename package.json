@@ -1,25 +1,34 @@
 {
   "name": "cicc-carlow-masjid",
-  "version": "0.0.1",
-  "description": "Carlow Islamic Cultural Centre website.",
-  "main": "index.html",
+  "version": "1.0.0",
+  "description": "The official website of Carlow Islamic Cultural Centre.",
   "repository": "git@github.com:carlowmasjidcicc/carlowmasjidcicc.github.io.git",
-  "author": "Nazmul Alam <hello@nalam.me>",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "private": true,
+  "type": "module",
   "engines": {
-    "npm": "please-use-yarn",
-    "yarn": ">= 1.19.1"
-  },
-  "devDependencies": {
-    "browser-sync": "2.29.1",
-    "gulp": "4.0.2"
+    "node": ">=22"
   },
   "scripts": {
-    "start": "npx gulp",
-    "verify": "yarn install --check-files",
-    "preci": "rm -fr node_modules",
-    "ci": "yarn install --frozen-lockfile",
-    "postinstall": "yarn start"
+    "generate:prayer-pdfs": "node scripts/generate-prayer-pdfs.mjs",
+    "dev": "npm run generate:prayer-pdfs && astro dev",
+    "start": "npm run generate:prayer-pdfs && astro dev",
+    "build": "npm run generate:prayer-pdfs && astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "validate:html": "html-validate \"dist/**/*.html\"",
+    "test:e2e": "playwright test",
+    "test": "npm run build && npm run validate:html && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@astrojs/sitemap": "3.7.4",
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.64.1",
+    "astro": "7.4.4",
+    "html-validate": "11.17.0",
+    "pdfkit": "0.20.2",
+    "sharp": "0.35.5",
+    "typescript": "6.0.3"
   }
 }
