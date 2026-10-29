@@ -18,7 +18,10 @@ export const site = {
   },
   directionsUrl:
     "https://www.google.com/maps/search/?api=1&query=14A%20Carlow%20Shopping%20Centre%2C%20Carlow%2C%20R93%20A0E0",
+  mapEmbedUrl:
+    "https://www.google.com/maps?q=14A%20Carlow%20Shopping%20Centre%2C%20Carlow%2C%20R93%20A0E0&output=embed",
   formAction: "https://formspree.io/f/mdornnkn",
+  googleAnalyticsId: "G-57NJ9XEM85",
   companyNumber: "541774",
   registeredCharityNumber: "20200211",
 } as const;
@@ -46,6 +49,15 @@ export const socialLinks = [
 export const donationLinks = {
   goFundMe: "https://gofund.me/6ef76ae9",
   sumUp: "https://pay.sumup.com/b2c/Q7S4QJH2",
+} as const;
+
+export const bankDetails = {
+  accountName: "Carlow Islamic Cultural Centre",
+  bankName: "AIB Carlow",
+  accountNumber: "44097381",
+  sortCode: "93-31-04",
+  iban: "IE82AIBK93310444097381",
+  bic: "AIBKIE2D",
 } as const;
 
 export const prayerInformation = {
@@ -81,21 +93,6 @@ export const programmes = [
     name: "Tafseer of the Qur'an",
     schedule: "Friday evening — contact us to confirm the time",
     audience: "Everyone",
-  },
-] as const;
-
-export const madrasaSessions = [
-  {
-    group: "Girls",
-    days: "Monday to Friday",
-    times: ["4:00pm", "5:30pm", "6:45pm"],
-    note: null,
-  },
-  {
-    group: "Boys",
-    days: "Monday to Friday",
-    times: ["4:00pm", "5:30pm", "6:45pm"],
-    note: "A Hifz class was previously published for 6:00pm. Contact the centre to confirm current placement and availability.",
   },
 ] as const;
 

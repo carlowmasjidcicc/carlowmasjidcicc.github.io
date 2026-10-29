@@ -99,7 +99,103 @@ test("mobile navigation exposes every primary destination", async ({
   }
 });
 
-test("the site sets no visitor cookies", async ({ page, context }) => {
+test("analytics remains off when consent is absent or declined", async ({
+  page,
+  context,
+}) => {
   await page.goto("/index.html");
+
   expect(await context.cookies()).toEqual([]);
+  await expect(page.locator("[data-google-analytics]")).toHaveCount(0);
+  await expect(page.locator("[data-analytics-consent]")).toBeVisible();
+  expect(
+    await page.evaluate(() =>
+      window.localStorage.getItem("cicc-analytics-consent-v1"),
+    ),
+  ).toBeNull();
+
+  await page.locator("[data-analytics-decline]").click();
+
+  await expect(page.locator("[data-analytics-consent]")).toBeHidden();
+  await expect(page.locator("[data-google-analytics]")).toHaveCount(0);
+  expect(await context.cookies()).toEqual([]);
+  expect(
+    await page.evaluate(() =>
+      window.localStorage.getItem("cicc-analytics-consent-v1"),
+    ),
+  ).toBe("denied");
+});
+
+test("analytics loads only after the visitor opts in", async ({ page }) => {
+  await page.route(
+    /https:\/\/www\.googletagmanager\.com\/gtag\/js.*/,
+    async (route) => {
+      await route.fulfill({
+        contentType: "application/javascript",
+        body: "",
+      });
+    },
+  );
+  await page.goto("/index.html");
+
+  await page.locator("[data-analytics-allow]").click();
+
+  await expect(page.locator("[data-analytics-consent]")).toBeHidden();
+  await expect(page.locator("[data-google-analytics]")).toHaveAttribute(
+    "src",
+    /googletagmanager\.com\/gtag\/js\?id=G-57NJ9XEM85/,
+  );
+  expect(
+    await page.evaluate(() =>
+      window.localStorage.getItem("cicc-analytics-consent-v1"),
+    ),
+  ).toBe("granted");
+});
+
+test("the Google Map loads only after a visitor requests it", async ({
+  page,
+}) => {
+  await page.route(/https:\/\/www\.google\.com\/maps\?.*/, async (route) => {
+    await route.fulfill({
+      contentType: "text/html",
+      body: "<!doctype html><title>Map test</title>",
+    });
+  });
+  await page.goto("/contact.html");
+
+  const frame = page.locator("[data-map-frame]");
+  const placeholder = page.locator("[data-map-placeholder]");
+  await expect(frame).toBeHidden();
+  await expect(placeholder).toBeVisible();
+  await expect(frame).not.toHaveAttribute("src", /.+/);
+
+  await page.locator("[data-load-map]").click();
+
+  await expect(frame).toBeVisible();
+  await expect(placeholder).toBeHidden();
+  await expect(frame).toHaveAttribute(
+    "src",
+    /^https:\/\/www\.google\.com\/maps\?/,
+  );
+});
+
+test("the latest confirmed bank details are published", async ({ page }) => {
+  await page.goto("/projects.html");
+
+  const bankDetails = page.locator(".bank-details");
+  await expect(bankDetails).toContainText("Carlow Islamic Cultural Centre");
+  await expect(bankDetails).toContainText("AIB Carlow");
+  await expect(bankDetails).toContainText("44097381");
+  await expect(bankDetails).toContainText("93-31-04");
+  await expect(bankDetails).toContainText("IE82AIBK93310444097381");
+  await expect(bankDetails).toContainText("AIBKIE2D");
+});
+
+test("the madrasa page does not publish a timetable", async ({ page }) => {
+  await page.goto("/madrasa.html");
+
+  await expect(page.getByText("Weekday learning times.")).toHaveCount(0);
+  await expect(page.getByText("4:00pm")).toHaveCount(0);
+  await expect(page.getByText("5:30pm")).toHaveCount(0);
+  await expect(page.getByText("6:45pm")).toHaveCount(0);
 });

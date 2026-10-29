@@ -1,14 +1,14 @@
 ---
 import { Image } from "astro:assets";
 import Icon from "../components/Icon.astro";
-import { madrasaSessions, site } from "../data/site";
+import { site } from "../data/site";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import entrance from "../assets/images/centre-entrance.jpeg";
 ---
 
 <BaseLayout
   title="Children's madrasa"
-  description="Published session information and enquiries for the children's madrasa at Carlow Islamic Cultural Centre."
+  description="Learning information and enquiries for the children's madrasa at Carlow Islamic Cultural Centre."
   image={entrance.src}
 >
   <header class="page-hero">
@@ -36,58 +36,6 @@ import entrance from "../assets/images/centre-entrance.jpeg";
       </div>
     </div>
   </header>
-
-  <section class="section" aria-labelledby="schedule-title">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Published sessions</p>
-          <h2 id="schedule-title">Weekday learning times.</h2>
-        </div>
-        <p>
-          Session starts are shown exactly as previously published. Placement,
-          finish time, term dates, fees and availability must be confirmed
-          directly with the centre.
-        </p>
-      </div>
-
-      <div class="notice notice--sand schedule-notice">
-        <Icon name="info" size={21} />
-        <div>
-          <strong>Contact the madrasa before attending</strong>
-          <p>
-            A session time alone does not confirm a place. Please ask about the
-            appropriate class and current availability for your child.
-          </p>
-        </div>
-      </div>
-
-      <div class="session-grid">
-        {
-          madrasaSessions.map((session) => (
-            <article class="session-card">
-              <div class="session-card__head">
-                <span class="icon-disc"><Icon name="book" size={23} /></span>
-                <div>
-                  <span class="tag">{session.days}</span>
-                  <h3>{session.group}' classes</h3>
-                </div>
-              </div>
-              <ul>
-                {session.times.map((time, index) => (
-                  <li>
-                    <span>Session {index + 1}</span>
-                    <strong>{time}</strong>
-                  </li>
-                ))}
-              </ul>
-              {session.note && <p class="session-note">{session.note}</p>}
-            </article>
-          ))
-        }
-      </div>
-    </div>
-  </section>
 
   <section class="section section--soft" aria-labelledby="learning-title">
     <div class="container two-column">
@@ -124,7 +72,7 @@ import entrance from "../assets/images/centre-entrance.jpeg";
         <h2 id="enquiry-title">Start with a conversation.</h2>
         <p>
           Ask about age groups, level, term dates, fees, safeguarding,
-          availability and the right session before making plans.
+          availability and enrolment before making plans.
         </p>
       </div>
       <div class="button-row">
@@ -146,73 +94,6 @@ import entrance from "../assets/images/centre-entrance.jpeg";
 </BaseLayout>
 
 <style>
-  .schedule-notice {
-    margin-bottom: 1rem;
-  }
-
-  .session-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  .session-card {
-    padding: clamp(1.4rem, 3vw, 2rem);
-    background: white;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .session-card__head {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .session-card__head .icon-disc {
-    flex: 0 0 auto;
-    margin: 0;
-  }
-
-  .session-card h3 {
-    margin: 0.45rem 0 0;
-  }
-
-  .session-card ul {
-    display: grid;
-    gap: 0.6rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .session-card li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.8rem 0.95rem;
-    background: var(--color-mist);
-    border-radius: var(--radius-sm);
-  }
-
-  .session-card li span {
-    color: var(--color-text-muted);
-    font-size: 0.86rem;
-  }
-
-  .session-card li strong {
-    font-variant-numeric: tabular-nums;
-  }
-
-  .session-note {
-    margin: 1rem 0 0;
-    color: var(--color-text-muted);
-    font-size: 0.82rem;
-  }
-
   .enquiry-panel {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -236,7 +117,6 @@ import entrance from "../assets/images/centre-entrance.jpeg";
   }
 
   @media (max-width: 50rem) {
-    .session-grid,
     .enquiry-panel {
       grid-template-columns: 1fr;
       align-items: start;

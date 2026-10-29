@@ -31,7 +31,7 @@ rather than changing individual pages.
 Operational information follows a no-guessing policy:
 
 - Prayer and Jumu'ah times are published only from a centre-verified timetable.
-- Conflicting bank details are not displayed.
+- Bank details are published only after the latest account is confirmed.
 - Unverified schedules include a direct contact fallback.
 - Dated notices should be removed or updated when they expire.
 
@@ -45,6 +45,7 @@ updated. In the repository's **Settings → Pages** screen, set the source to
 **GitHub Actions** once before the first deployment. The custom domain is
 preserved through `public/CNAME`.
 
-The website intentionally avoids analytics, embedded maps, social widgets and
-payment scripts. The contact form posts to the existing public Formspree form
+Google Analytics is consent-first and remains unloaded until a visitor opts in.
+The Google Map is also click-to-load. The website does not embed social widgets
+or payment scripts. The contact form posts to the existing public Formspree
 endpoint only after a visitor submits it.
