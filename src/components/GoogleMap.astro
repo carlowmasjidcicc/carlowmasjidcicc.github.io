@@ -4,80 +4,24 @@ import { site } from "../data/site";
 ---
 
 <section class="map-panel" aria-labelledby="map-title" data-google-map>
-  <div class="map-placeholder" data-map-placeholder>
-    <span class="map-orbit" aria-hidden="true"></span>
-    <div>
-      <span class="icon-disc"><Icon name="map" size={26} /></span>
-      <p class="eyebrow eyebrow--light">Google Maps</p>
-      <h2 id="map-title">See the centre on the map.</h2>
-      <p>
-        The interactive map connects to Google only after you choose to load
-        it.
-      </p>
-      <div class="button-row">
-        <button class="button button--gold" type="button" data-load-map>
-          Load interactive map
-        </button>
-        <a
-          class="button button--ghost-light"
-          href={site.directionsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Open directions <Icon name="external" size={17} />
-        </a>
-      </div>
-    </div>
-  </div>
-
+  <h2 class="visually-hidden" id="map-title">Carlow Masjid on Google Maps</h2>
   <iframe
     class="map-frame"
     title="Google Map showing Carlow Islamic Cultural Centre"
-    data-map-frame
-    data-map-src={site.mapEmbedUrl}
+    src={site.mapEmbedUrl}
     loading="lazy"
     referrerpolicy="strict-origin-when-cross-origin"
     allowfullscreen
-    hidden></iframe>
-
-  <noscript>
-    <p>
-      JavaScript is required for the embedded map.
-      <a href={site.directionsUrl}>Open directions in Google Maps</a>.
-    </p>
-  </noscript>
+    data-map-frame></iframe>
+  <a
+    class="map-directions button button--gold"
+    href={site.directionsUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Open directions <Icon name="external" size={17} />
+  </a>
 </section>
-
-<script>
-  document.querySelectorAll<HTMLElement>("[data-google-map]").forEach((map) => {
-    const button = map.querySelector<HTMLButtonElement>("[data-load-map]");
-    const frame = map.querySelector<HTMLIFrameElement>("[data-map-frame]");
-    const placeholder = map.querySelector<HTMLElement>("[data-map-placeholder]");
-
-    button?.addEventListener("click", () => {
-      const source = frame?.dataset.mapSrc;
-      if (!source || !frame || !placeholder) return;
-
-      try {
-        const url = new URL(source);
-        if (
-          url.protocol !== "https:" ||
-          url.hostname !== "www.google.com" ||
-          url.pathname !== "/maps"
-        ) {
-          return;
-        }
-
-        frame.src = url.toString();
-        frame.hidden = false;
-        placeholder.hidden = true;
-        frame.focus();
-      } catch {
-        return;
-      }
-    });
-  });
-</script>
 
 <style>
   .map-panel {
@@ -89,67 +33,17 @@ import { site } from "../data/site";
     box-shadow: var(--shadow-lg);
   }
 
-  .map-placeholder {
-    position: relative;
-    display: grid;
-    align-items: center;
-    min-height: 32rem;
-    padding: clamp(1.75rem, 6vw, 5rem);
-    overflow: hidden;
-    color: rgba(255, 255, 255, 0.72);
-    background:
-      linear-gradient(135deg, transparent 47%, rgba(255, 255, 255, 0.035) 48% 52%, transparent 53%)
-        0 0 / 3.5rem 3.5rem,
-      radial-gradient(circle at 88% 20%, rgba(34, 142, 114, 0.35), transparent 35%),
-      var(--color-ink);
-  }
-
-  .map-placeholder[hidden] {
-    display: none;
-  }
-
-  .map-placeholder > div {
-    position: relative;
-    z-index: 1;
-    max-width: 38rem;
-  }
-
-  .map-placeholder .icon-disc {
-    color: var(--color-gold-soft);
-    background: rgba(255, 255, 255, 0.09);
-  }
-
-  .map-placeholder h2 {
-    max-width: 13ch;
-    margin: 0.6rem 0 1rem;
-    color: white;
-  }
-
-  .map-placeholder p:not(.eyebrow) {
-    max-width: 34rem;
-  }
-
-  .map-orbit {
-    position: absolute;
-    right: -8rem;
-    bottom: -11rem;
-    width: 29rem;
-    aspect-ratio: 1;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 50%;
-    box-shadow:
-      0 0 0 4rem rgba(255, 255, 255, 0.025),
-      0 0 0 8rem rgba(255, 255, 255, 0.015);
-  }
-
   .map-frame {
+    display: block;
     width: 100%;
     height: 32rem;
     border: 0;
   }
 
-  noscript p {
-    padding: 1rem;
-    color: white;
+  .map-directions {
+    position: absolute;
+    z-index: 1;
+    top: 1rem;
+    right: 1rem;
   }
 </style>

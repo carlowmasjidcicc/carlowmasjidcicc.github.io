@@ -16,14 +16,19 @@ export const site = {
     postalCode: "R93 A0E0",
     country: "Ireland",
   },
+  mapPlaceId: "ChIJ6RM33lJdXUgRsNJzleDKjE0",
   directionsUrl:
-    "https://www.google.com/maps/search/?api=1&query=14A%20Carlow%20Shopping%20Centre%2C%20Carlow%2C%20R93%20A0E0",
+    "https://www.google.com/maps/search/?api=1&query=Carlow+Islamic+Cultural+Centre&query_place_id=ChIJ6RM33lJdXUgRsNJzleDKjE0",
   mapEmbedUrl:
-    "https://www.google.com/maps?q=14A%20Carlow%20Shopping%20Centre%2C%20Carlow%2C%20R93%20A0E0&output=embed",
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d400!2d-6.9268296!3d52.8350646!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x485d5d52de3713e9%3A0x4d8ccae09573d2b0!2sCarlow%20Masjid!5e0!3m2!1sen!2sie",
   formAction: "https://formspree.io/f/mdornnkn",
   googleAnalyticsId: "G-57NJ9XEM85",
   companyNumber: "541774",
   registeredCharityNumber: "20200211",
+  designer: {
+    name: "Nazmul Alam",
+    url: "https://nalam.me",
+  },
 } as const;
 
 export const navigation = [
