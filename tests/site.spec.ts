@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { access, readFile } from "node:fs/promises";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import {
@@ -21,6 +22,20 @@ const routes = [
   "/privacy.html",
   "/404.html",
 ] as const;
+
+test("GitHub Pages skips Jekyll and keeps the custom domain", async () => {
+  const rootCname = (
+    await readFile(new URL("../CNAME", import.meta.url), "utf8")
+  ).trim();
+  const publicCname = (
+    await readFile(new URL("../public/CNAME", import.meta.url), "utf8")
+  ).trim();
+
+  expect(rootCname).toBe("carlowmasjid.ie");
+  expect(publicCname).toBe("carlowmasjid.ie");
+  await access(new URL("../.nojekyll", import.meta.url));
+  await access(new URL("../public/.nojekyll", import.meta.url));
+});
 
 test("the verified prayer dataset is complete and unchanged", () => {
   expect(prayerTimetable).toHaveLength(457);

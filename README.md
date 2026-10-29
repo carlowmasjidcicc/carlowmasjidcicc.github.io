@@ -51,10 +51,19 @@ website and PDFs always use the same source data.
 
 ## Deployment
 
-`.github/workflows/deploy.yml` builds and deploys the site whenever `main` is
-updated. In the repository's **Settings → Pages** screen, set the source to
-**GitHub Actions** once before the first deployment. The custom domain is
-preserved through `public/CNAME`.
+`.github/workflows/deploy.yml` builds the Astro site and publishes it with
+`actions/deploy-pages` whenever `main` is updated.
+
+GitHub Pages must use **Settings → Pages → Source: GitHub Actions**. If the
+source is left as "Deploy from a branch", GitHub also runs the legacy Jekyll
+builder against this repository. Astro components start with `---` fences, which
+Jekyll treats as YAML front matter and rejects (for example
+`ThemeSwitcher.astro` and `MobileActions.astro`).
+
+A root `.nojekyll` file disables that Jekyll pass. The built site also includes
+`public/.nojekyll` so GitHub serves Astro's `_astro/` assets. The custom domain
+is `carlowmasjid.ie`, kept in both root `CNAME` (picked up by GitHub Pages) and
+`public/CNAME` (copied into the deployed site).
 
 Google Analytics is consent-first and remains unloaded until a visitor opts in.
 The Google Map is also click-to-load. The website does not embed social widgets
