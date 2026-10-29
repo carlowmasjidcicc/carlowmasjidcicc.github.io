@@ -1,3 +1,7 @@
+# Publishes the Astro build through GitHub Actions.
+# Keep Settings → Pages → Source set to GitHub Actions so the legacy
+# Jekyll "pages-build-deployment" job does not parse .astro frontmatter.
+# A root .nojekyll file is the fallback if that branch builder still runs.
 name: Deploy to GitHub Pages
 
 on:
