@@ -1,0 +1,7 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "no-raw-characters": "off",
+    "tel-non-breaking": "off"
+  }
+}

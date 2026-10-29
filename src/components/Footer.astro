@@ -1,0 +1,193 @@
+---
+import Icon from "./Icon.astro";
+import Logo from "./Logo.astro";
+import { navigation, site, socialLinks } from "../data/site";
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-pattern" aria-hidden="true"></div>
+  <div class="container footer-grid">
+    <div class="footer-intro">
+      <a href="/index.html">
+        <Logo />
+      </a>
+      <p>
+        A welcoming place for worship, learning and community in Carlow Town.
+      </p>
+    </div>
+
+    <div>
+      <h2>Explore</h2>
+      <ul>
+        {
+          navigation.slice(0, 4).map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <h2>Visit & contact</h2>
+      <ul class="contact-list">
+        <li>
+          <Icon name="map" size={17} />
+          <a href={site.directionsUrl} target="_blank" rel="noopener noreferrer">
+            {site.address.street}, {site.address.postalCode}
+          </a>
+        </li>
+        <li>
+          <Icon name="phone" size={17} />
+          <a href={site.phoneHref}>{site.phoneDisplay}</a>
+        </li>
+        <li>
+          <Icon name="mail" size={17} />
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h2>Connect</h2>
+      <ul>
+        {
+          socialLinks.map((item) => (
+            <li>
+              <a href={item.href} target="_blank" rel="noopener noreferrer">
+                {item.label} <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))
+        }
+        <li><a href="/privacy.html">Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer-meta">
+    <p>© {currentYear} {site.name}</p>
+    <p>
+      Company no. {site.companyNumber}
+      <span aria-hidden="true"> · </span>
+      RCN {site.registeredCharityNumber}
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(4rem, 7vw, 6.5rem) 0 1.5rem;
+    color: rgba(255, 255, 255, 0.76);
+    background: var(--color-ink);
+  }
+
+  .footer-pattern {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 0.5rem;
+    background:
+      linear-gradient(135deg, transparent 40%, var(--color-gold) 41% 59%, transparent 60%)
+        0 0 / 1rem 1rem,
+      var(--color-emerald);
+    opacity: 0.8;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: minmax(16rem, 1.6fr) repeat(3, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .footer-intro a {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+  }
+
+  .footer-intro :global(.brand-copy span) {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .footer-intro p {
+    max-width: 30rem;
+    margin-top: 1.25rem;
+  }
+
+  h2 {
+    margin: 0 0 1.1rem;
+    color: white;
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    font-size: 0.9rem;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.25em;
+  }
+
+  a:hover {
+    color: white;
+    text-decoration-color: var(--color-gold);
+  }
+
+  .contact-list li {
+    display: grid;
+    grid-template-columns: 1.2rem 1fr;
+    align-items: start;
+    gap: 0.45rem;
+  }
+
+  .contact-list :global(.icon) {
+    color: var(--color-gold);
+    margin-top: 0.2rem;
+  }
+
+  .footer-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.75rem;
+  }
+
+  .footer-meta p {
+    margin: 0;
+  }
+
+  @media (max-width: 58rem) {
+    .footer-grid {
+      grid-template-columns: 1.5fr 1fr;
+    }
+  }
+
+  @media (max-width: 36rem) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-meta {
+      display: grid;
+      margin-top: 3rem;
+    }
+  }
+</style>

@@ -1,0 +1,103 @@
+---
+import { createHash } from "node:crypto";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import MobileActions from "../components/MobileActions.astro";
+import { site, socialLinks } from "../data/site";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description, image, noindex = false } = Astro.props;
+const pageTitle =
+  title === site.name ? title : `${title} | ${site.shortName}`;
+const canonicalPath =
+  Astro.url.pathname === "/index.html" ? "/" : Astro.url.pathname;
+const canonical = new URL(canonicalPath, Astro.site);
+const socialImage = image
+  ? new URL(image, Astro.site)
+  : new URL("/android-chrome-512x512.png", Astro.site);
+
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": ["Mosque", "Organization"],
+  name: site.name,
+  legalName: site.legalName,
+  url: site.url,
+  email: site.email,
+  telephone: "+353870913763",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: site.address.street,
+    addressLocality: site.address.locality,
+    postalCode: site.address.postalCode,
+    addressCountry: "IE",
+  },
+  sameAs: socialLinks.map((link) => link.href),
+});
+const schemaHash = createHash("sha256")
+  .update(structuredData)
+  .digest("base64");
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  `script-src 'self' 'sha256-${schemaHash}'`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "frame-src 'none'",
+  "form-action 'self' https://formspree.io",
+  "upgrade-insecure-requests",
+].join("; ");
+---
+
+<!doctype html>
+<html lang="en-IE">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content={contentSecurityPolicy} />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="theme-color" content="#071a16" />
+    <meta name="color-scheme" content="light" />
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <title>{pageTitle}</title>
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/safari-pinned-tab.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IE" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+
+    <script type="application/ld+json" set:html={structuredData}></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <Header pathname={Astro.url.pathname} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <MobileActions />
+  </body>
+</html>

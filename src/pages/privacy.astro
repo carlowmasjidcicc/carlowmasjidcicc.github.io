@@ -1,0 +1,95 @@
+---
+import { site } from "../data/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Privacy"
+  description="Privacy information for the Carlow Islamic Cultural Centre website."
+>
+  <header class="page-hero">
+    <div class="container page-hero__content">
+      <p class="eyebrow">Privacy</p>
+      <h1>A simple site with minimal data collection.</h1>
+      <p class="lede">
+        This website is designed to provide useful information without
+        analytics, advertising trackers or embedded third-party widgets.
+      </p>
+    </div>
+  </header>
+
+  <article class="section">
+    <div class="container--narrow policy">
+      <section>
+        <h2>What this website collects</h2>
+        <p>
+          The site itself does not set analytics or advertising cookies and
+          does not create user accounts. GitHub Pages, which hosts the site,
+          may process technical request information needed to serve pages and
+          protect its service.
+        </p>
+      </section>
+
+      <section>
+        <h2>Contact form</h2>
+        <p>
+          If you submit the contact form, your name, email address, selected
+          topic and message are sent to Formspree so the enquiry can be
+          delivered to CICC. Formspree receives this information only after you
+          choose to submit the form.
+        </p>
+        <p>
+          Do not include sensitive personal, health or financial information.
+          You can contact CICC directly at
+          <a href={`mailto:${site.email}`}>{site.email}</a> instead.
+        </p>
+      </section>
+
+      <section>
+        <h2>External services</h2>
+        <p>
+          Directions, Facebook, WhatsApp, GoFundMe and SumUp open only after
+          you choose their links. Their own privacy terms apply once you leave
+          this website. No map, fundraising or social-media script is embedded
+          in the page.
+        </p>
+      </section>
+
+      <section>
+        <h2>Questions or requests</h2>
+        <p>
+          For a question about information you have sent to CICC, email
+          <a href={`mailto:${site.email}`}>{site.email}</a> or call
+          <a href={site.phoneHref}>{site.phoneDisplay}</a>.
+        </p>
+      </section>
+
+      <p class="policy-date">Last reviewed: 29 October 2026</p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .policy {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .policy section {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .policy h2 {
+    margin: 0 0 0.8rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .policy p {
+    color: var(--color-text-muted);
+  }
+
+  .policy-date {
+    font-size: 0.82rem;
+  }
+</style>

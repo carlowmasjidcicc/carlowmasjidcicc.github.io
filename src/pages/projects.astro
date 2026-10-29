@@ -1,0 +1,330 @@
+---
+import { Image } from "astro:assets";
+import Icon from "../components/Icon.astro";
+import { donationLinks, site } from "../data/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import islamicWindow from "../assets/images/islamic-window.jpg";
+---
+
+<BaseLayout
+  title="Mosque & Islamic school project"
+  description="The verified fundraising routes and published vision for a permanent mosque and Islamic school in Carlow."
+  image={islamicWindow.src}
+>
+  <header class="project-hero">
+    <div class="container project-hero__grid">
+      <div>
+        <p class="eyebrow eyebrow--light">A permanent home in Carlow</p>
+        <h1>Build a legacy of worship, learning and community.</h1>
+        <p class="lede">
+          CICC is fundraising for a larger, permanent mosque and Islamic school
+          to serve Carlow and the surrounding area.
+        </p>
+        <div class="button-row">
+          <a
+            class="button button--gold"
+            href={donationLinks.goFundMe}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="heart" size={18} />
+            Donate on GoFundMe
+          </a>
+          <a class="button button--ghost-light" href="#project-overview">
+            Understand the project
+          </a>
+        </div>
+      </div>
+      <div class="campaign-card">
+        <span>Official campaign target</span>
+        <strong>€500,000</strong>
+        <p>
+          For the current amount raised and donation count, view the live
+          GoFundMe campaign.
+        </p>
+        <a
+          href={donationLinks.goFundMe}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View live campaign <Icon name="external" size={16} />
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="project-overview" aria-labelledby="overview-title">
+    <div class="container two-column">
+      <div class="content-stack">
+        <p class="eyebrow">Why it matters</p>
+        <h2 id="overview-title">Space for a growing community.</h2>
+        <p class="lede">
+          The centre currently operates from rented premises with limited
+          capacity. The campaign's published purpose is to acquire a larger
+          property for a permanent mosque and Islamic school.
+        </p>
+        <p>
+          A permanent home would support daily worship, children's and adult
+          learning, community gatherings and practical support in one
+          sustainable space.
+        </p>
+      </div>
+      <div class="media-frame media-frame--arch project-image">
+        <Image
+          src={islamicWindow}
+          alt="An illuminated Islamic geometric arch"
+          width={1024}
+          quality={80}
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="goals-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">The vision</p>
+          <h2 id="goals-title">Three priorities, one shared home.</h2>
+        </div>
+        <p>
+          The project's public campaign describes a place designed around
+          worship, education and community connection.
+        </p>
+      </div>
+      <div class="card-grid">
+        <article class="card">
+          <span class="icon-disc"><Icon name="home" size={23} /></span>
+          <h3>Worship</h3>
+          <p>
+            A permanent, welcoming mosque with capacity for the community's
+            prayer needs.
+          </p>
+        </article>
+        <article class="card">
+          <span class="icon-disc"><Icon name="book" size={23} /></span>
+          <h3>Education</h3>
+          <p>
+            Dedicated facilities for children's madrasa, Qur'an learning and
+            adult programmes.
+          </p>
+        </article>
+        <article class="card">
+          <span class="icon-disc"><Icon name="people" size={23} /></span>
+          <h3>Community</h3>
+          <p>
+            Space for gatherings, counselling, support and connection across
+            Carlow.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section donation-section" id="donate" aria-labelledby="donate-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Ways to give</p>
+          <h2 id="donate-title">Choose a verified payment route.</h2>
+        </div>
+        <p>
+          Both links below currently identify Carlow Islamic Cultural Centre.
+          No third-party payment script loads until you choose to leave this
+          site.
+        </p>
+      </div>
+
+      <div class="giving-grid">
+        <article class="giving-card giving-card--featured">
+          <span class="tag">Campaign page</span>
+          <h3>GoFundMe</h3>
+          <p>
+            See the live target, amount raised, donor count and campaign story
+            before contributing.
+          </p>
+          <a
+            class="button button--gold"
+            href={donationLinks.goFundMe}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open GoFundMe <Icon name="external" size={17} />
+          </a>
+        </article>
+        <article class="giving-card">
+          <span class="tag">Direct payment</span>
+          <h3>SumUp</h3>
+          <p>
+            The hosted payment page names Carlow Islamic Cultural Centre and
+            the mosque and Islamic school project.
+          </p>
+          <a
+            class="button button--outline"
+            href={donationLinks.sumUp}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open SumUp <Icon name="external" size={17} />
+          </a>
+        </article>
+      </div>
+
+      <div class="notice notice--sand bank-notice">
+        <Icon name="info" size={21} />
+        <div>
+          <strong>Bank details are intentionally not published</strong>
+          <p>
+            The previous site contained conflicting account and IBAN numbers.
+            To avoid directing funds incorrectly, ask the centre for verified
+            bank-transfer details using the contact information below.
+          </p>
+          <a href={site.phoneHref}>Call {site.phoneDisplay}</a>
+          <span aria-hidden="true"> · </span>
+          <a href={`mailto:${site.email}`}>Email the centre</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .project-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(5rem, 10vw, 9rem);
+    color: rgba(255, 255, 255, 0.7);
+    background:
+      radial-gradient(circle at 80% 20%, rgba(38, 155, 124, 0.32), transparent 32%),
+      var(--color-ink);
+  }
+
+  .project-hero::before {
+    content: "";
+    position: absolute;
+    right: -12rem;
+    bottom: -17rem;
+    width: 38rem;
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 5rem rgba(255, 255, 255, 0.025),
+      0 0 0 10rem rgba(255, 255, 255, 0.015);
+  }
+
+  .project-hero__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+    align-items: end;
+    gap: clamp(2rem, 7vw, 7rem);
+  }
+
+  .project-hero h1 {
+    max-width: 12ch;
+    margin: 0.7rem 0 1.2rem;
+    color: white;
+  }
+
+  .project-hero .lede {
+    max-width: 40rem;
+    margin-bottom: 1.8rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .campaign-card {
+    padding: clamp(1.4rem, 4vw, 2.5rem);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: var(--radius-xl);
+    backdrop-filter: blur(12px);
+  }
+
+  .campaign-card > span {
+    color: var(--color-gold-soft);
+    font-size: 0.72rem;
+    font-weight: 850;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .campaign-card > strong {
+    display: block;
+    margin: 0.5rem 0 0.75rem;
+    color: white;
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    line-height: 1;
+  }
+
+  .campaign-card a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: white;
+    font-weight: 800;
+  }
+
+  .project-image :global(img) {
+    filter: saturate(0.75);
+  }
+
+  .giving-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .giving-card {
+    display: grid;
+    align-content: start;
+    min-height: 21rem;
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    background: white;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .giving-card h3 {
+    margin: 2.5rem 0 0.75rem;
+    font-size: clamp(1.7rem, 3vw, 2.35rem);
+  }
+
+  .giving-card p {
+    color: var(--color-text-muted);
+  }
+
+  .giving-card .button {
+    justify-self: start;
+    margin-top: auto;
+  }
+
+  .giving-card--featured {
+    color: rgba(255, 255, 255, 0.72);
+    background: var(--color-emerald-dark);
+    border-color: var(--color-emerald-dark);
+  }
+
+  .giving-card--featured h3 {
+    color: white;
+  }
+
+  .giving-card--featured p {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .bank-notice {
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 50rem) {
+    .project-hero__grid,
+    .giving-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

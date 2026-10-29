@@ -1,0 +1,180 @@
+---
+import Icon from "./Icon.astro";
+import { prayerInformation, site } from "../data/site";
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<section class:list={["prayer-panel", { "prayer-panel--compact": compact }]} aria-labelledby="prayer-panel-title">
+  <div class="prayer-panel__intro">
+    <p class="eyebrow eyebrow--light">
+      <span class="live-dot" aria-hidden="true"></span>
+      Prayer information
+    </p>
+    <h2 id="prayer-panel-title">{prayerInformation.status}</h2>
+    <p>{prayerInformation.summary}</p>
+  </div>
+
+  <div class="prayer-panel__status">
+    <div class="status-icon" aria-hidden="true">
+      <Icon name="clock" size={28} />
+    </div>
+    <div>
+      <strong>No times are being estimated</strong>
+      <p>{prayerInformation.detail}</p>
+    </div>
+  </div>
+
+  <div class="prayer-panel__actions">
+    <a class="button button--light" href={site.phoneHref}>
+      <Icon name="phone" size={18} />
+      Call {site.phoneDisplay}
+    </a>
+    <a
+      class="button button--ghost-light"
+      href={site.whatsappUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <Icon name="message" size={18} />
+      Ask on WhatsApp
+    </a>
+  </div>
+</section>
+
+<style>
+  .prayer-panel {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: center;
+    overflow: hidden;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    color: white;
+    background:
+      radial-gradient(circle at 90% -20%, rgba(60, 200, 161, 0.3), transparent 42%),
+      linear-gradient(135deg, var(--color-emerald-dark), var(--color-ink));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .prayer-panel::after {
+    content: "";
+    position: absolute;
+    right: -5rem;
+    bottom: -7rem;
+    width: 17rem;
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 2rem rgba(255, 255, 255, 0.025),
+      0 0 0 4rem rgba(255, 255, 255, 0.018);
+    pointer-events: none;
+  }
+
+  h2 {
+    max-width: 16ch;
+    margin: 0.45rem 0 0.65rem;
+    color: white;
+    font-size: clamp(1.65rem, 3vw, 2.55rem);
+  }
+
+  p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .live-dot {
+    width: 0.48rem;
+    height: 0.48rem;
+    background: var(--color-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0.25rem rgba(211, 169, 83, 0.14);
+  }
+
+  .prayer-panel__status {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.85rem;
+    align-items: start;
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+  }
+
+  .prayer-panel__status strong {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: white;
+  }
+
+  .prayer-panel__status p {
+    font-size: 0.84rem;
+  }
+
+  .status-icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    aspect-ratio: 1;
+    color: var(--color-gold);
+    background: rgba(211, 169, 83, 0.12);
+    border-radius: 50%;
+  }
+
+  .prayer-panel__actions {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .prayer-panel--compact {
+    grid-template-columns: 1.15fr 1fr auto;
+  }
+
+  .prayer-panel--compact .prayer-panel__actions {
+    grid-column: auto;
+    display: grid;
+  }
+
+  .prayer-panel--compact .prayer-panel__actions .button {
+    justify-content: flex-start;
+  }
+
+  @media (max-width: 64rem) {
+    .prayer-panel--compact {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .prayer-panel--compact .prayer-panel__actions {
+      grid-column: 1 / -1;
+      display: flex;
+    }
+  }
+
+  @media (max-width: 43rem) {
+    .prayer-panel,
+    .prayer-panel--compact {
+      grid-template-columns: 1fr;
+    }
+
+    .prayer-panel__actions,
+    .prayer-panel--compact .prayer-panel__actions {
+      grid-column: auto;
+      display: grid;
+    }
+
+    .prayer-panel__actions .button {
+      width: 100%;
+    }
+  }
+</style>

@@ -1,0 +1,153 @@
+---
+import Icon from "../components/Icon.astro";
+import PrayerPanel from "../components/PrayerPanel.astro";
+import { site } from "../data/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Prayer times"
+  description="Verified prayer and Jumu'ah timetable information for Carlow Islamic Cultural Centre."
+>
+  <header class="page-hero">
+    <div class="container page-hero__content">
+      <p class="eyebrow">Prayer at Carlow Masjid</p>
+      <h1>Clear times, without guesswork.</h1>
+      <p class="lede">
+        This page will publish prayer starts, congregation times and Jumu'ah
+        details only when they have been verified by the centre.
+      </p>
+    </div>
+  </header>
+
+  <section class="section section--compact">
+    <div class="container">
+      <PrayerPanel />
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="published-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">The useful details</p>
+          <h2 id="published-title">What the timetable will include.</h2>
+        </div>
+        <p>
+          Prayer starts and congregation times are different. The redesigned
+          timetable keeps them visibly separate and includes a clear update
+          date.
+        </p>
+      </div>
+      <div class="card-grid">
+        <article class="card">
+          <span class="icon-disc"><Icon name="clock" size={23} /></span>
+          <h3>Daily prayers</h3>
+          <p>
+            Fajr, Dhuhr, Asr, Maghrib and Isha with separate start and
+            congregation columns.
+          </p>
+        </article>
+        <article class="card">
+          <span class="icon-disc"><Icon name="people" size={23} /></span>
+          <h3>Jumu'ah</h3>
+          <p>
+            Each verified Friday prayer time, with seasonal changes made
+            explicit.
+          </p>
+        </article>
+        <article class="card">
+          <span class="icon-disc"><Icon name="calendar" size={23} /></span>
+          <h3>Monthly view</h3>
+          <p>
+            An accessible table for the month, with a PDF offered only as an
+            optional download.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="help-title">
+    <div class="container two-column prayer-help">
+      <div class="content-stack">
+        <p class="eyebrow">Before you travel</p>
+        <h2 id="help-title">Need today's time now?</h2>
+        <p class="lede">
+          Call or message the centre directly. This is the reliable option
+          until a current timetable is supplied.
+        </p>
+        <div class="button-row">
+          <a class="button" href={site.phoneHref}>
+            <Icon name="phone" size={18} />
+            Call {site.phoneDisplay}
+          </a>
+          <a
+            class="button button--outline"
+            href={site.whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="message" size={18} />
+            WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div class="faq-list">
+        <details>
+          <summary>Why are calculated times not shown?</summary>
+          <p>
+            Calculation services can provide approximate prayer starts, but
+            they do not know Carlow Masjid's congregation or Jumu'ah schedule.
+            Publishing estimates as centre times could mislead visitors.
+          </p>
+        </details>
+        <details>
+          <summary>Where are the old PDF timetables?</summary>
+          <p>
+            The repository's available PDFs are from 2025. They have been
+            removed from the current visitor journey so an outdated timetable
+            cannot be mistaken for today's schedule.
+          </p>
+        </details>
+        <details>
+          <summary>Will a PDF be available again?</summary>
+          <p>
+            Yes, when a verified current timetable is supplied. The accessible
+            web timetable will remain the primary format.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prayer-help {
+    align-items: start;
+  }
+
+  .faq-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  details {
+    padding: 1.1rem 1.2rem;
+    background: white;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+
+  summary {
+    color: var(--color-ink);
+    cursor: pointer;
+    font-weight: 800;
+  }
+
+  details p {
+    margin: 0.85rem 0 0;
+    color: var(--color-text-muted);
+  }
+</style>

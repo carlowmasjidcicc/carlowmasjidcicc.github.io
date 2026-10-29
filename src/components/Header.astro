@@ -1,0 +1,239 @@
+---
+import Icon from "./Icon.astro";
+import Logo from "./Logo.astro";
+import { navigation } from "../data/site";
+
+interface Props {
+  pathname: string;
+}
+
+const { pathname } = Astro.props;
+const isCurrent = (href: string) => pathname === href || pathname.endsWith(href);
+---
+
+<header class="site-header">
+  <div class="status-strip">
+    <div class="container status-strip__inner">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span>Prayer timetable awaiting verified update</span>
+      <a href="/prayer-times.html">View prayer information <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+
+  <div class="container header-row">
+    <a class="brand-link" href="/index.html">
+      <Logo />
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      {
+        navigation.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isCurrent(item.href) ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a class="button button--small button--gold" href="/projects.html#donate">
+        Donate
+      </a>
+    </nav>
+
+    <details class="mobile-nav">
+      <summary>
+        <Icon name="menu" size={21} />
+        <span>Menu</span>
+      </summary>
+      <nav aria-label="Mobile navigation">
+        {
+          navigation.map((item) => (
+            <a
+              href={item.href}
+              aria-current={isCurrent(item.href) ? "page" : undefined}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+        <a class="button button--gold" href="/projects.html#donate">Donate</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 20;
+    background: color-mix(in srgb, var(--color-paper) 94%, transparent);
+    border-bottom: 1px solid var(--color-line);
+    backdrop-filter: blur(18px);
+  }
+
+  .status-strip {
+    background: var(--color-ink);
+    color: var(--color-mist);
+    font-size: 0.76rem;
+  }
+
+  .status-strip__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    gap: 0.5rem;
+  }
+
+  .status-strip a {
+    color: white;
+    font-weight: 700;
+    margin-left: 0.35rem;
+    text-underline-offset: 0.2em;
+  }
+
+  .status-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    background: var(--color-gold);
+    border-radius: 999px;
+    box-shadow: 0 0 0 0.25rem rgba(211, 169, 83, 0.14);
+  }
+
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 5rem;
+    gap: 1rem;
+  }
+
+  .brand-link {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.7rem, 1.5vw, 1.35rem);
+  }
+
+  .desktop-nav > a:not(.button) {
+    position: relative;
+    color: var(--color-text-muted);
+    font-size: 0.86rem;
+    font-weight: 700;
+    padding-block: 0.6rem;
+    text-decoration: none;
+  }
+
+  .desktop-nav > a:not(.button)::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    background: var(--color-emerald);
+    border-radius: 2px;
+    opacity: 0;
+    transform: scaleX(0.4);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  .desktop-nav > a:hover,
+  .desktop-nav > a[aria-current="page"] {
+    color: var(--color-ink);
+  }
+
+  .desktop-nav > a:hover::after,
+  .desktop-nav > a[aria-current="page"]::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .mobile-nav {
+    display: none;
+    position: relative;
+  }
+
+  .mobile-nav summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.85rem;
+    color: var(--color-ink);
+    background: white;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.84rem;
+    font-weight: 800;
+    list-style: none;
+  }
+
+  .mobile-nav summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-nav nav {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    right: 0;
+    display: grid;
+    width: min(19rem, calc(100vw - 2rem));
+    padding: 0.65rem;
+    background: white;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .mobile-nav nav a:not(.button) {
+    color: var(--color-ink);
+    padding: 0.8rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .mobile-nav nav a:not(.button):hover,
+  .mobile-nav nav a[aria-current="page"] {
+    background: var(--color-mist);
+  }
+
+  .mobile-nav .button {
+    margin-top: 0.35rem;
+  }
+
+  @media (max-width: 68rem) {
+    .desktop-nav {
+      display: none;
+    }
+
+    .mobile-nav {
+      display: block;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .status-strip__inner {
+      justify-content: flex-start;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .status-strip__inner > span:not(.status-dot) {
+      display: none;
+    }
+
+    .status-strip a {
+      margin-left: 0;
+    }
+
+    .header-row {
+      min-height: 4.5rem;
+    }
+  }
+</style>

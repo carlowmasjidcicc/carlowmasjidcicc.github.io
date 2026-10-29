@@ -1,0 +1,332 @@
+---
+import Icon from "../components/Icon.astro";
+import { site } from "../data/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Visit & contact"
+  description="Address, directions, phone, WhatsApp, email and contact form for Carlow Islamic Cultural Centre."
+>
+  <header class="page-hero">
+    <div class="container page-hero__content">
+      <p class="eyebrow">Visit & contact</p>
+      <h1>A clear route to the centre.</h1>
+      <p class="lede">
+        Get directions, call, message or send an enquiry. If you are visiting
+        for the first time, contact us before travelling for current prayer,
+        access and parking information.
+      </p>
+    </div>
+  </header>
+
+  <section class="section section--compact" aria-labelledby="contact-options-title">
+    <div class="container">
+      <h2 class="visually-hidden" id="contact-options-title">Contact options</h2>
+      <div class="contact-grid">
+        <a
+          class="contact-card contact-card--primary"
+          href={site.directionsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="icon-disc"><Icon name="map" size={24} /></span>
+          <span>
+            <small>Visit</small>
+            <strong>{site.address.street}</strong>
+            <span>{site.address.locality}, {site.address.postalCode}</span>
+          </span>
+          <Icon name="external" size={19} />
+        </a>
+        <a class="contact-card" href={site.phoneHref}>
+          <span class="icon-disc"><Icon name="phone" size={24} /></span>
+          <span>
+            <small>Call</small>
+            <strong>{site.phoneDisplay}</strong>
+            <span>Tap to call the centre</span>
+          </span>
+          <Icon name="arrow" size={19} />
+        </a>
+        <a
+          class="contact-card"
+          href={site.whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="icon-disc"><Icon name="message" size={24} /></span>
+          <span>
+            <small>WhatsApp</small>
+            <strong>Message the centre</strong>
+            <span>Opens WhatsApp securely</span>
+          </span>
+          <Icon name="external" size={19} />
+        </a>
+        <a class="contact-card" href={`mailto:${site.email}`}>
+          <span class="icon-disc"><Icon name="mail" size={24} /></span>
+          <span>
+            <small>Email</small>
+            <strong>{site.email}</strong>
+            <span>For non-urgent enquiries</span>
+          </span>
+          <Icon name="arrow" size={19} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="form-title">
+    <div class="container form-layout">
+      <div class="content-stack">
+        <p class="eyebrow">Send an enquiry</p>
+        <h2 id="form-title">How can we help?</h2>
+        <p class="lede">
+          Use this form for general enquiries. For today's prayer time or a
+          time-sensitive matter, calling is the quickest option.
+        </p>
+        <div class="notice">
+          <Icon name="info" size={20} />
+          <div>
+            <strong>Privacy note</strong>
+            <p>
+              The form is processed by Formspree only after you submit it.
+              Please do not include sensitive personal or financial
+              information.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <form class="contact-form card" action={site.formAction} method="POST">
+        <input type="hidden" name="_subject" value="Website enquiry for Carlow Masjid" />
+        <div class="visually-hidden" aria-hidden="true">
+          <label for="company">Leave this field empty</label>
+          <input id="company" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="name">Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              minlength="2"
+              maxlength="80"
+              autocomplete="name"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              maxlength="160"
+              autocomplete="email"
+              inputmode="email"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="topic">Topic</label>
+            <select id="topic" name="topic" required>
+              <option value="">Choose a topic</option>
+              <option value="general">General enquiry</option>
+              <option value="prayer">Prayer or Jumu'ah</option>
+              <option value="madrasa">Children's madrasa</option>
+              <option value="programme">Class or programme</option>
+              <option value="project">Mosque project or donation</option>
+              <option value="community-support">Community support</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea
+              id="message"
+              name="message"
+              minlength="10"
+              maxlength="2000"
+              aria-describedby="message-help"
+              required></textarea>
+            <p class="field-help" id="message-help">
+              10–2,000 characters. Do not include sensitive information.
+            </p>
+          </div>
+
+          <button class="button" type="submit">
+            Send enquiry <Icon name="arrow" size={18} />
+          </button>
+          <p class="field-help">
+            By submitting, you agree to Formspree processing the details needed
+            to deliver your message. See our <a href="/privacy.html">privacy notice</a>.
+          </p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="first-visit-title">
+    <div class="container first-visit">
+      <div>
+        <p class="eyebrow eyebrow--light">First visit</p>
+        <h2 id="first-visit-title">Check the practical details before you arrive.</h2>
+        <p>
+          Entrance, parking and accessibility guidance has not been verified
+          for publication. Contact the centre so your visit can be planned
+          confidently.
+        </p>
+      </div>
+      <div class="button-row">
+        <a class="button button--gold" href={site.phoneHref}>
+          <Icon name="phone" size={18} />
+          Call the centre
+        </a>
+        <a
+          class="button button--ghost-light"
+          href={site.directionsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open directions
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .contact-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    min-height: 9rem;
+    padding: 1.25rem;
+    color: var(--color-ink);
+    background: white;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+  }
+
+  .contact-card:hover {
+    color: var(--color-ink);
+    border-color: var(--color-emerald);
+  }
+
+  .contact-card .icon-disc {
+    margin: 0;
+  }
+
+  .contact-card > span:nth-child(2) {
+    display: grid;
+  }
+
+  .contact-card small {
+    color: var(--color-emerald);
+    font-size: 0.68rem;
+    font-weight: 850;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .contact-card strong {
+    margin: 0.2rem 0;
+  }
+
+  .contact-card span span {
+    color: var(--color-text-muted);
+    font-size: 0.84rem;
+  }
+
+  .contact-card--primary {
+    color: white;
+    background: var(--color-emerald-dark);
+    border-color: var(--color-emerald-dark);
+  }
+
+  .contact-card--primary:hover {
+    color: white;
+  }
+
+  .contact-card--primary .icon-disc {
+    color: var(--color-gold-soft);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .contact-card--primary small,
+  .contact-card--primary span span {
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .form-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(24rem, 1.2fr);
+    align-items: start;
+    gap: clamp(2rem, 7vw, 6rem);
+  }
+
+  .contact-form {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .field select {
+    width: 100%;
+    min-height: 3.2rem;
+    padding: 0.75rem 0.9rem;
+    color: var(--color-ink);
+    background: white;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-sm);
+  }
+
+  .contact-form .button {
+    justify-self: start;
+  }
+
+  .first-visit {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 3rem;
+    padding: clamp(1.5rem, 5vw, 4rem);
+    color: rgba(255, 255, 255, 0.72);
+    background: var(--color-ink);
+    border-radius: var(--radius-xl);
+  }
+
+  .first-visit h2 {
+    max-width: 16ch;
+    margin: 0.6rem 0 1rem;
+    color: white;
+  }
+
+  .first-visit p:not(.eyebrow) {
+    max-width: 42rem;
+  }
+
+  @media (max-width: 55rem) {
+    .form-layout,
+    .first-visit {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+  }
+
+  @media (max-width: 42rem) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
