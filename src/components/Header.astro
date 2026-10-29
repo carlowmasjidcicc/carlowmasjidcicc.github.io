@@ -1,6 +1,7 @@
 ---
 import Icon from "./Icon.astro";
 import Logo from "./Logo.astro";
+import ThemeSwitcher from "./ThemeSwitcher.astro";
 import { navigation } from "../data/site";
 
 interface Props {
@@ -15,7 +16,7 @@ const isCurrent = (href: string) => pathname === href || pathname.endsWith(href)
   <div class="status-strip">
     <div class="container status-strip__inner">
       <span class="status-dot" aria-hidden="true"></span>
-      <span>Published prayer timetable: October 2026–January 2027</span>
+      <span>Published prayer timetable: October 2026–December 2027</span>
       <a href="/prayer-times.html">View today’s times <span aria-hidden="true">→</span></a>
     </div>
   </div>
@@ -41,25 +42,28 @@ const isCurrent = (href: string) => pathname === href || pathname.endsWith(href)
       </a>
     </nav>
 
-    <details class="mobile-nav">
-      <summary>
-        <Icon name="menu" size={21} />
-        <span>Menu</span>
-      </summary>
-      <nav aria-label="Mobile navigation">
-        {
-          navigation.map((item) => (
-            <a
-              href={item.href}
-              aria-current={isCurrent(item.href) ? "page" : undefined}
-            >
-              {item.label}
-            </a>
-          ))
-        }
-        <a class="button button--gold" href="/projects.html#donate">Donate</a>
-      </nav>
-    </details>
+    <div class="header-actions">
+      <ThemeSwitcher />
+      <details class="mobile-nav">
+        <summary>
+          <Icon name="menu" size={21} />
+          <span class="menu-label">Menu</span>
+        </summary>
+        <nav aria-label="Mobile navigation">
+          {
+            navigation.map((item) => (
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+          <a class="button button--gold" href="/projects.html#donate">Donate</a>
+        </nav>
+      </details>
+    </div>
   </div>
 </header>
 
@@ -74,7 +78,7 @@ const isCurrent = (href: string) => pathname === href || pathname.endsWith(href)
 
   .status-strip {
     background: var(--color-ink);
-    color: var(--color-mist);
+    color: #edf6f2;
     font-size: 0.76rem;
   }
 
@@ -110,7 +114,7 @@ const isCurrent = (href: string) => pathname === href || pathname.endsWith(href)
   }
 
   .brand-link {
-    color: var(--color-ink);
+    color: var(--color-heading);
     text-decoration: none;
   }
 
@@ -118,6 +122,12 @@ const isCurrent = (href: string) => pathname === href || pathname.endsWith(href)
     display: flex;
     align-items: center;
     gap: clamp(0.7rem, 1.5vw, 1.35rem);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
   }
 
   .desktop-nav > a:not(.button) {
@@ -143,7 +153,7 @@ const isCurrent = (href: string) => pathname === href || pathname.endsWith(href)
 
   .desktop-nav > a:hover,
   .desktop-nav > a[aria-current="page"] {
-    color: var(--color-ink);
+    color: var(--color-heading);
   }
 
   .desktop-nav > a:hover::after,
@@ -163,8 +173,8 @@ const isCurrent = (href: string) => pathname === href || pathname.endsWith(href)
     gap: 0.4rem;
     min-height: 2.75rem;
     padding: 0.55rem 0.85rem;
-    color: var(--color-ink);
-    background: white;
+    color: var(--color-heading);
+    background: var(--color-surface-raised);
     border: 1px solid var(--color-line-strong);
     border-radius: 999px;
     cursor: pointer;
@@ -184,14 +194,14 @@ const isCurrent = (href: string) => pathname === href || pathname.endsWith(href)
     display: grid;
     width: min(19rem, calc(100vw - 2rem));
     padding: 0.65rem;
-    background: white;
+    background: var(--color-surface-raised);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
   }
 
   .mobile-nav nav a:not(.button) {
-    color: var(--color-ink);
+    color: var(--color-heading);
     padding: 0.8rem 0.85rem;
     border-radius: var(--radius-sm);
     font-weight: 700;
@@ -234,6 +244,18 @@ const isCurrent = (href: string) => pathname === href || pathname.endsWith(href)
 
     .header-row {
       min-height: 4.5rem;
+    }
+  }
+
+  @media (max-width: 28rem) {
+    .mobile-nav summary {
+      width: 2.75rem;
+      padding-inline: 0;
+      justify-content: center;
+    }
+
+    .menu-label {
+      display: none;
     }
   }
 </style>

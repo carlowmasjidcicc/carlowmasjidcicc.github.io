@@ -49,9 +49,44 @@ const structuredData = JSON.stringify({
     <meta name="viewport" content="width=device-width" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="theme-color" content="#071a16" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        let preference = "system";
+
+        try {
+          const stored = window.localStorage.getItem("cicc-theme-preference");
+          if (stored === "light" || stored === "dark" || stored === "system") {
+            preference = stored;
+          }
+        } catch {
+          // System mode remains the safe default when storage is unavailable.
+        }
+
+        const theme =
+          preference === "system"
+            ? window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light"
+            : preference;
+
+        root.dataset.themePreference = preference;
+        root.dataset.theme = theme;
+        root.style.colorScheme = theme;
+
+        const themeColour = document.querySelector('meta[name="theme-color"]');
+        if (themeColour) {
+          themeColour.setAttribute(
+            "content",
+            theme === "dark" ? "#071a16" : "#fbfaf6",
+          );
+        }
+      })();
+    </script>
 
     <title>{pageTitle}</title>
     <link rel="canonical" href={canonical} />

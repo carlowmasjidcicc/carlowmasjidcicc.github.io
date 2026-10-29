@@ -163,7 +163,11 @@ import { site } from "../data/site";
     width: min(46rem, calc(100% - 2rem));
     padding: 1.25rem;
     color: var(--color-text);
-    background: rgba(255, 255, 255, 0.97);
+    background: color-mix(
+      in srgb,
+      var(--color-surface-raised) 97%,
+      transparent
+    );
     border: 1px solid var(--color-line-strong);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);

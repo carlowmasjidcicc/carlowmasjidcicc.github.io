@@ -23,12 +23,12 @@ const routes = [
 ] as const;
 
 test("the verified prayer dataset is complete and unchanged", () => {
-  expect(prayerTimetable).toHaveLength(123);
+  expect(prayerTimetable).toHaveLength(457);
   expect(
     createHash("sha256")
       .update(JSON.stringify(prayerTimetable))
       .digest("hex"),
-  ).toBe("6f61e6e44eda1109991aff6ef1c68bcaa4f7b1ccaba01db18947f3fd177bbdd6");
+  ).toBe("9a2a253a834fb0743a5c37d281f499353b85b0b6d960cbb44f010299a3a3f5eb");
 
   const monthCounts = prayerTimetable.reduce<Record<string, number>>(
     (counts, day) => {
@@ -43,6 +43,17 @@ test("the verified prayer dataset is complete and unchanged", () => {
     "2026-11": 30,
     "2026-12": 31,
     "2027-01": 31,
+    "2027-02": 28,
+    "2027-03": 31,
+    "2027-04": 30,
+    "2027-05": 31,
+    "2027-06": 30,
+    "2027-07": 31,
+    "2027-08": 31,
+    "2027-09": 30,
+    "2027-10": 31,
+    "2027-11": 30,
+    "2027-12": 31,
   });
 
   prayerTimetable.forEach((day, index) => {
@@ -64,14 +75,21 @@ test("the verified prayer dataset is complete and unchanged", () => {
     isha: "18:44",
   });
   expect(prayerTimetable.at(-1)).toEqual({
-    date: "2027-01-31",
-    fajr: "06:24",
-    sunrise: "08:10",
-    dhuhr: "12:43",
-    asr: "14:46",
-    maghrib: "17:11",
-    isha: "18:51",
+    date: "2027-12-31",
+    fajr: "06:44",
+    sunrise: "08:37",
+    dhuhr: "12:32",
+    asr: "14:07",
+    maghrib: "16:24",
+    isha: "18:11",
   });
+  expect(
+    prayerTimetable.find(({ date }) => date === "2027-03-25"),
+  ).toMatchObject({ fajr: "04:44" });
+  expect(
+    prayerTimetable.find(({ date }) => date === "2027-07-20"),
+  ).toMatchObject({ isha: "23:02" });
+  expect(timetableMonths).toHaveLength(15);
 });
 
 test("current and next prayer use Europe/Dublin wall-clock time", () => {
@@ -108,7 +126,7 @@ test("current and next prayer use Europe/Dublin wall-clock time", () => {
     time: "05:26",
     epoch: Date.parse("2026-10-25T05:26:00Z"),
   });
-  expect(getPrayerState(new Date("2027-02-01T12:00:00Z"))).toBeNull();
+  expect(getPrayerState(new Date("2028-01-01T12:00:00Z"))).toBeNull();
 });
 
 for (const route of routes) {
@@ -254,6 +272,16 @@ test("prayer timetable switches between day, week and month", async ({
     "href",
     "/timetables/carlow-november-2026.pdf",
   );
+
+  await explorer.locator("[data-month-picker]").selectOption("2027-12");
+  await expect(explorer.locator("[data-month-body] tr")).toHaveCount(31);
+  await expect(explorer.locator("[data-month-heading]")).toHaveText(
+    "December 2027",
+  );
+  await expect(explorer.locator("[data-month-download]")).toHaveAttribute(
+    "href",
+    "/timetables/carlow-december-2027.pdf",
+  );
 });
 
 test("every branded monthly timetable PDF is downloadable", async ({
@@ -361,6 +389,93 @@ test("the latest confirmed bank details are published", async ({ page }) => {
   await expect(bankDetails).toContainText("93-31-04");
   await expect(bankDetails).toContainText("IE82AIBK93310444097381");
   await expect(bankDetails).toContainText("AIBKIE2D");
+});
+
+test("the historical team roster is present with shared contact details", async ({
+  page,
+}) => {
+  await page.goto("/about.html");
+
+  const team = page.locator("#our-team");
+  await expect(team.locator(".team-card")).toHaveCount(6);
+
+  for (const member of [
+    "Hafid Tribak",
+    "Muhammad Yousaf",
+    "Ahmed Ghirfani",
+    "Abderrahim Elaasri",
+    "Sayed Alam",
+    "Nazmul Alam",
+  ]) {
+    await expect(team.getByRole("heading", { name: member })).toBeVisible();
+  }
+
+  await expect(team.getByText("Imam", { exact: true })).toBeVisible();
+  await expect(team.getByText("Trustee", { exact: true })).toBeVisible();
+  await expect(team.getByText("Treasurer", { exact: true })).toBeVisible();
+  await expect(team.getByText("Technical Specialist", { exact: true })).toBeVisible();
+  await expect(team.locator('a[href="mailto:info@carlowmasjid.ie"]')).toHaveCount(
+    6,
+  );
+});
+
+test("light, dark and system themes apply and persist", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("/index.html");
+
+  const root = page.locator("html");
+  const light = page.locator('[data-theme-option="light"]');
+  const dark = page.locator('[data-theme-option="dark"]');
+  const system = page.locator('[data-theme-option="system"]');
+
+  await expect(root).toHaveAttribute("data-theme-preference", "system");
+  await expect(root).toHaveAttribute("data-theme", "light");
+  await expect(system).toHaveAttribute("aria-pressed", "true");
+
+  await dark.click();
+  await expect(root).toHaveAttribute("data-theme-preference", "dark");
+  await expect(root).toHaveAttribute("data-theme", "dark");
+  await expect(dark).toHaveAttribute("aria-pressed", "true");
+  expect(
+    await page.evaluate(() =>
+      window.localStorage.getItem("cicc-theme-preference"),
+    ),
+  ).toBe("dark");
+
+  await page.reload();
+  await expect(root).toHaveAttribute("data-theme", "dark");
+  await expect(dark).toHaveAttribute("aria-pressed", "true");
+
+  await light.click();
+  await expect(root).toHaveAttribute("data-theme", "light");
+  await system.click();
+  await expect(root).toHaveAttribute("data-theme-preference", "system");
+  await expect(root).toHaveAttribute("data-theme", "light");
+
+  await page.emulateMedia({ colorScheme: "dark" });
+  await expect(root).toHaveAttribute("data-theme", "dark");
+  await expect(system).toHaveAttribute("aria-pressed", "true");
+});
+
+test("every page remains accessible in dark mode", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop");
+  await page.addInitScript(() => {
+    window.localStorage.setItem("cicc-theme-preference", "dark");
+  });
+
+  for (const route of routes) {
+    await page.goto(route);
+    const accessibilityScan = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+
+    expect(
+      accessibilityScan.violations,
+      `${route}\n${JSON.stringify(accessibilityScan.violations, null, 2)}`,
+    ).toEqual([]);
+  }
 });
 
 test("the madrasa page does not publish a timetable", async ({ page }) => {
