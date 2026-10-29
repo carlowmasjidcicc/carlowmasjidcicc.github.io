@@ -41,11 +41,11 @@ and the visual system in `src/styles/global.css`.
 
 ### Prayer timetable
 
-[`src/data/prayer-times.ts`](src/data/prayer-times.ts) contains the 123 verified
-daily rows from October 2026 through January 2027. The values are prayer starts
+[`src/data/prayer-times.ts`](src/data/prayer-times.ts) contains the 457 verified
+daily rows from October 2026 through December 2027. The values are prayer starts
 and sunrise in `Europe/Dublin` wall-clock time; they are not jama’ah times.
 
-`npm run generate:prayer-pdfs` creates the four branded, downloadable PDFs in
+`npm run generate:prayer-pdfs` creates the 15 branded, downloadable PDFs in
 `public/timetables/`. The normal build runs this generator automatically so the
 website and PDFs always use the same source data.
 

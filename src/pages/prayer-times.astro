@@ -9,7 +9,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <BaseLayout
   title="Prayer times"
-  description="Verified daily, weekly and monthly prayer start times for Carlow from October 2026 through January 2027."
+  description="Verified daily, weekly and monthly prayer start times for Carlow from October 2026 through December 2027."
 >
   <header class="page-hero">
     <div class="container page-hero__content">
@@ -55,7 +55,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <p class="eyebrow">Read before travelling</p>
         <h2 id="guidance-title">Starts and congregation times are different.</h2>
         <p class="lede">
-          The four supplied timetables contain Fajr, sunrise, Dhuhr, Asr,
+          The 15 supplied timetables contain Fajr, sunrise, Dhuhr, Asr,
           Maghrib and Isha start times. They do not contain jama’ah or Jumu’ah
           times, so the website does not invent or imply them.
         </p>
@@ -79,7 +79,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <dl class="timetable-facts">
         <div>
           <dt>Published coverage</dt>
-          <dd>1 October 2026–31 January 2027</dd>
+          <dd>1 October 2026–31 December 2027</dd>
         </div>
         <div>
           <dt>Timezone</dt>
@@ -113,7 +113,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   .timetable-facts {
     margin: 0;
     overflow: hidden;
-    background: white;
+    background: var(--color-surface-raised);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
@@ -141,7 +141,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .timetable-facts dd {
     margin: 0;
-    color: var(--color-ink);
+    color: var(--color-heading);
     font-weight: 750;
   }
 

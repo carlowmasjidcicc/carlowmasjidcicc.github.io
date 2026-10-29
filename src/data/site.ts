@@ -63,7 +63,7 @@ export const bankDetails = {
 export const prayerInformation = {
   status: "Verified timetable published",
   summary:
-    "Daily prayer start times and sunrise are available from October 2026 through January 2027.",
+    "Daily prayer start times and sunrise are available from October 2026 through December 2027.",
   detail:
     "The supplied timetable does not include jama’ah or Jumu’ah times. Contact the centre before travelling if you need congregation details.",
 } as const;
