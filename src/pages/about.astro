@@ -5,6 +5,23 @@ import { site } from "../data/site";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import exterior from "../assets/images/centre-exterior.jpeg";
 import prayerHall from "../assets/images/prayer-hall.jpeg";
+import defaultTeamMember from "../assets/images/team/team-default.jpeg";
+import imamHafid from "../assets/images/team/team-imam-hafid.png";
+import treasurer from "../assets/images/team/team-treasurer.png";
+import trustee from "../assets/images/team/team-trustee.png";
+
+const teamMembers = [
+  { name: "Hafid Tribak", role: "Imam", image: imamHafid },
+  { name: "Muhammad Yousaf", role: "Trustee", image: trustee },
+  { name: "Ahmed Ghirfani", role: "Treasurer", image: treasurer },
+  { name: "Abderrahim Elaasri", role: "Member", image: defaultTeamMember },
+  { name: "Sayed Alam", role: "Member", image: defaultTeamMember },
+  {
+    name: "Nazmul Alam",
+    role: "Technical Specialist",
+    image: defaultTeamMember,
+  },
+] as const;
 ---
 
 <BaseLayout
@@ -129,15 +146,55 @@ import prayerHall from "../assets/images/prayer-hall.jpeg";
     </div>
   </section>
 
+  <section class="section section--soft" id="our-team" aria-labelledby="team-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Our team</p>
+          <h2 id="team-title">People serving Carlow’s community.</h2>
+        </div>
+        <p>
+          The centre’s team supports worship, governance and day-to-day
+          operations. Public enquiries are routed through the shared centre
+          contact.
+        </p>
+      </div>
+
+      <div class="team-grid">
+        {
+          teamMembers.map((member) => (
+            <article class="team-card">
+              <div class="team-card__portrait">
+                <Image
+                  src={member.image}
+                  alt=""
+                  width={320}
+                  height={320}
+                  quality={86}
+                  loading="lazy"
+                />
+              </div>
+              <p>{member.role}</p>
+              <h3>{member.name}</h3>
+              <a href={`mailto:${site.email}`}>
+                <Icon name="mail" size={16} />
+                Contact via CICC
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
   <section class="section section--sand" aria-labelledby="governance-title">
     <div class="container governance-grid">
       <div>
         <p class="eyebrow">Governance</p>
-        <h2 id="governance-title">A community organisation with public identifiers.</h2>
+        <h2 id="governance-title">A transparent community organisation.</h2>
         <p class="lede">
-          Personal leadership details from the previous site are not repeated
-          until they can be reviewed. Enquiries are routed through the centre's
-          shared contact details.
+          The centre’s public identifiers and shared contact details are
+          available here for clear, accountable communication.
         </p>
       </div>
       <dl class="governance-card">
@@ -197,7 +254,7 @@ import prayerHall from "../assets/images/prayer-hall.jpeg";
   .timeline li {
     min-height: 18rem;
     padding: clamp(1.4rem, 3vw, 2rem);
-    background: white;
+    background: var(--color-surface-raised);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
@@ -205,7 +262,7 @@ import prayerHall from "../assets/images/prayer-hall.jpeg";
 
   .timeline li > span {
     display: inline-block;
-    color: var(--color-emerald);
+    color: var(--color-link);
     font-size: 0.72rem;
     font-weight: 850;
     letter-spacing: 0.1em;
@@ -218,6 +275,61 @@ import prayerHall from "../assets/images/prayer-hall.jpeg";
 
   .timeline p {
     color: var(--color-text-muted);
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .team-card {
+    display: grid;
+    justify-items: center;
+    padding: clamp(1.5rem, 4vw, 2.35rem);
+    text-align: center;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .team-card__portrait {
+    width: 8.5rem;
+    aspect-ratio: 1;
+    overflow: hidden;
+    padding: 0.35rem;
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-line);
+    border-radius: 50%;
+  }
+
+  .team-card__portrait :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  .team-card p {
+    margin: 1.2rem 0 0;
+    color: var(--color-link);
+    font-size: 0.7rem;
+    font-weight: 850;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .team-card h3 {
+    margin: 0.4rem 0 1.1rem;
+  }
+
+  .team-card a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 800;
   }
 
   .governance-grid {
@@ -235,7 +347,7 @@ import prayerHall from "../assets/images/prayer-hall.jpeg";
   .governance-card {
     margin: 0;
     padding: clamp(1.4rem, 4vw, 2.5rem);
-    background: white;
+    background: var(--color-surface-raised);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-sm);
@@ -260,7 +372,7 @@ import prayerHall from "../assets/images/prayer-hall.jpeg";
 
   .governance-card dd {
     margin: 0.2rem 0 0;
-    color: var(--color-ink);
+    color: var(--color-heading);
     font-weight: 750;
   }
 
@@ -303,6 +415,16 @@ import prayerHall from "../assets/images/prayer-hall.jpeg";
     .join-panel {
       grid-template-columns: 1fr;
       align-items: start;
+    }
+
+    .team-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .team-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>
